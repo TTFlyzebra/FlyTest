@@ -1,0 +1,2 @@
+include ':camera2test'
+rootProject.name = "CameraTest"
