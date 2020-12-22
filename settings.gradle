@@ -1,2 +1,3 @@
+include ':camera1test'
 include ':camera2test'
-rootProject.name = "CameraTest"
+rootProject.name = "FlyTest"

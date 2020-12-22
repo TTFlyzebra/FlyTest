@@ -1,4 +1,4 @@
-package com.flyzebra.cameratest;
+package com.flyzebra.cameratest2;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,7 +20,7 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class Camera2Activity extends AppCompatActivity {
     private TextureView mTextureView;
     private CameraCaptureSession mCameraCaptureSession;
     private CameraDevice mCameraDevice;
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 mPreviewSurface = new Surface(arg0);
                 CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                 try {
-                    if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(Camera2Activity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    manager.openCamera("1", new CameraDevice.StateCallback() {
+                    manager.openCamera("0", new CameraDevice.StateCallback() {
                         @Override
                         public void onOpened(CameraDevice arg0) {
                             mCameraDevice = arg0;
