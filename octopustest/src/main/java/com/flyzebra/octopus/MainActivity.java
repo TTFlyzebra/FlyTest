@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void gpstest(View view) {
-
+        startActivity(new Intent(this,GpsActivity.class));
     }
 
     public void camera1test(View view) {

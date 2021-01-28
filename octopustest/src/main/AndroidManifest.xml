@@ -17,12 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.flyzebra.octopus.GpsActivity"/>
 
-        <activity android:name="com.flyzebra.octopus.Camera1Activity">
-        </activity>
+        <activity android:name="com.flyzebra.octopus.Camera1Activity"/>
 
-        <activity android:name="com.flyzebra.octopus.Camera2Activity">
-        </activity>
+        <activity android:name="com.flyzebra.octopus.Camera2Activity"/>
     </application>
 
 </manifest>
