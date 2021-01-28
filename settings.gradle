@@ -1,3 +1,2 @@
-include ':camera1test'
-include ':camera2test'
+include ':octopustest'
 rootProject.name = "FlyTest"
