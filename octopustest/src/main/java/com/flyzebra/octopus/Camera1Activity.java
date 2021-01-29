@@ -11,6 +11,8 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.flyzebra.octopus.utils.FlyLog;
+
 public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.Callback{
 
     private SurfaceView ac_main_sv;

@@ -1,4 +1,4 @@
-package com.flyzebra.octopus;
+package com.flyzebra.octopus.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class ROOT
+public class RootUtils
 {
 
     public static final String[] rootFilePaths = {

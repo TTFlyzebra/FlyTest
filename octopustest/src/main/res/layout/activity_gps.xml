@@ -15,6 +15,7 @@
         android:onClick="gpstest"/>
 
     <TextView
+        android:id="@+id/ac_gps_tv01"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

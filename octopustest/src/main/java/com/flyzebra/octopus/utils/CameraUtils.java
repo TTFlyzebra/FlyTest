@@ -1,4 +1,4 @@
-package com.flyzebra.octopus;
+package com.flyzebra.octopus.utils;
 
 import android.content.Context;
 import android.graphics.ImageFormat;

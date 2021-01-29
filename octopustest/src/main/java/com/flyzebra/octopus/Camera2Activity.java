@@ -19,6 +19,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.flyzebra.octopus.utils.CameraUtils;
+
 import java.util.Arrays;
 
 public class Camera2Activity extends AppCompatActivity {
