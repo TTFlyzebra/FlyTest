@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.flyzebra.octopus.utils.FlyLog;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,27 +25,28 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
     private StringBuffer textInfo = new StringBuffer();
     private LocationManager locationManager;
     private boolean isGpsEnabled = false;
-    private TextView textView;
+    private TextView tv01,tv02, tv03;
     public static List<String> list_provider = null;
-
-    private List<GpsSatellite> numSatelliteList = new ArrayList<GpsSatellite>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
-        textView = findViewById(R.id.ac_gps_tv01);
+        tv01 = findViewById(R.id.ac_gps_tv01);
+        tv02 = findViewById(R.id.ac_gps_tv02);
+        tv03 = findViewById(R.id.ac_gps_tv03);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         //判断是否开启GPS定位功能
         isGpsEnabled = locationManager.isProviderEnabled(GPS_LOCATION_NAME);
         textInfo.append(isGpsEnabled?"GPS定位功能已开启!\n":"GPS定位功能未开启!\n");
         list_provider = locationManager.getProviders(true);
         for(String provider:list_provider){
-            textInfo.append("find provider:"+provider+"\n");
+            textInfo.append("find provider:"+provider+".\n");
+            FlyLog.i("find provider:"+provider+".");
             locationManager.requestLocationUpdates(provider, 1000, 0, this);
         }
         locationManager.addGpsStatusListener(this );
-        textView.setText(textInfo.toString());
+        tv03.setText(textInfo.toString());
     }
 
 
@@ -60,6 +60,8 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
     @Override
     public void onLocationChanged(@NonNull Location location) {
         FlyLog.i("onLocationChanged, location=%s",location.toString());
+        FlyLog.i("经度："+location.getLongitude()+"，纬度："+location.getLatitude());
+        tv01.setText( "经度："+location.getLongitude()+"\n纬度："+location.getLatitude());
     }
 
     @Override
@@ -80,26 +82,34 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
     @Override
     public void onGpsStatusChanged(int event) {
         FlyLog.i("onGpsStatusChanged, event=%d.",event);
+        //textInfo.append("onGpsStatusChanged!["+event+"]\n");
         GpsStatus status = locationManager.getGpsStatus(null);
+        String temp = "";
         switch (event){
             /**
              * Event sent when the GPS system has started.
              */
             case GpsStatus.GPS_EVENT_STARTED :
-                textInfo.append("开始卫星定位！\n");
+                temp = "开始卫星定位！";
+                FlyLog.d(temp);
+                textInfo.append(temp+"\n");
                 break;
             /**
              * Event sent when the GPS system has stopped.
              */
             case GpsStatus.GPS_EVENT_STOPPED:
-                textInfo.append("停止卫星定位！\n");
+                temp = "停止卫星定位！";
+                FlyLog.d(temp);
+                textInfo.append(temp+"\n");
                 break;
             /**
              * Event sent when the GPS system has received its first fix since starting.
              * Call {@link #getTimeToFirstFix()} to find the time from start to first fix.
              */
             case GpsStatus.GPS_EVENT_FIRST_FIX:
-                textInfo.append("第一次定位成功！\n");
+                temp = "第一次定位成功！";
+                FlyLog.d(temp);
+                textInfo.append(temp+"\n");
                 break;
             /**
              * Event sent periodically to report GPS satellite status.
@@ -110,19 +120,22 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         }
 
         if(status==null) {
-            textInfo.append("没有捕捉到卫星!\n");
+            temp = "没有捕捉到卫星!";
+            FlyLog.d(temp);
+            textInfo.append(temp+"\n");
         }else {
-            int maxSatellites = status.getMaxSatellites();
             Iterator<GpsSatellite> it = status.getSatellites().iterator();
-            numSatelliteList.clear();
-            int count = 0;//记录搜索到的实际卫星数
-            while (it.hasNext() && count < maxSatellites) {
-                GpsSatellite s = it.next();
-                numSatelliteList.add(s);//将卫星信息存入队列
-                count++;
+            int count1 = 0;//记录搜索到的实际卫星数
+            int count2 = 0;//有效卫星数
+            for (GpsSatellite s:status.getSatellites()) {
+                count1++;
+                if (s.usedInFix()) {
+                    count2++;
+                }
             }
-            textInfo.append("获得卫星总数:" + numSatelliteList.size() + "\n");
+            FlyLog.d("卫星总数：" + count1+"，有效卫星："+count2+"。");
+            tv02.setText("卫星总数：" + count1+"\n有效卫星："+count2+"。");
         }
-        textView.setText(textInfo.toString());
+        tv03.setText(textInfo.toString());
     }
 }
