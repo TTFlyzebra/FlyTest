@@ -49,30 +49,6 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         textView.setText(textInfo.toString());
     }
 
-    //定义一个List存放所搜索到的卫星信息
-    private String updateGpsStatus(int event,GpsStatus status){
-        if(status == null){
-            textInfo.append("没有捕捉到卫星!\n");
-        }else if(event == GpsStatus.GPS_EVENT_FIRST_FIX){
-            textInfo.append("第一次定位成功！\n");
-        }else if(event == GpsStatus.GPS_EVENT_SATELLITE_STATUS){
-            int maxSatellites = status.getMaxSatellites();
-            Iterator<GpsSatellite> it = status.getSatellites().iterator();
-            numSatelliteList.clear();
-            int count = 0;//记录搜索到的实际卫星数
-            while(it.hasNext()&& count < maxSatellites){
-                GpsSatellite s = it.next();
-                numSatelliteList.add(s);//将卫星信息存入队列
-                count++;
-            }
-            textInfo.append("获得卫星总数:"+numSatelliteList.size()+"\n");
-        }else if(event == GpsStatus.GPS_EVENT_STARTED){
-            //定位启动
-        }else if(event == GpsStatus.GPS_EVENT_STOPPED){
-            //定位结束
-        }
-        return textInfo.toString();
-    }
 
     @Override
     protected void onDestroy() {
@@ -110,17 +86,20 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
              * Event sent when the GPS system has started.
              */
             case GpsStatus.GPS_EVENT_STARTED :
+                textInfo.append("开始卫星定位！\n");
                 break;
             /**
              * Event sent when the GPS system has stopped.
              */
             case GpsStatus.GPS_EVENT_STOPPED:
+                textInfo.append("停止卫星定位！\n");
                 break;
             /**
              * Event sent when the GPS system has received its first fix since starting.
              * Call {@link #getTimeToFirstFix()} to find the time from start to first fix.
              */
             case GpsStatus.GPS_EVENT_FIRST_FIX:
+                textInfo.append("第一次定位成功！\n");
                 break;
             /**
              * Event sent periodically to report GPS satellite status.
@@ -130,6 +109,20 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
                 break;
         }
 
-        textView.setText(updateGpsStatus(event,locationManager.getGpsStatus(null)));
+        if(status==null) {
+            textInfo.append("没有捕捉到卫星!\n");
+        }else {
+            int maxSatellites = status.getMaxSatellites();
+            Iterator<GpsSatellite> it = status.getSatellites().iterator();
+            numSatelliteList.clear();
+            int count = 0;//记录搜索到的实际卫星数
+            while (it.hasNext() && count < maxSatellites) {
+                GpsSatellite s = it.next();
+                numSatelliteList.add(s);//将卫星信息存入队列
+                count++;
+            }
+            textInfo.append("获得卫星总数:" + numSatelliteList.size() + "\n");
+        }
+        textView.setText(textInfo.toString());
     }
 }
