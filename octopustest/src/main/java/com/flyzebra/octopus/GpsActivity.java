@@ -104,6 +104,7 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
     @Override
     public void onGpsStatusChanged(int event) {
         FlyLog.i("onGpsStatusChanged, event=%d.",event);
+        GpsStatus status = locationManager.getGpsStatus(null);
         switch (event){
             /**
              * Event sent when the GPS system has started.
