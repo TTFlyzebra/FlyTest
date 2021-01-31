@@ -36,15 +36,17 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         tv02 = findViewById(R.id.ac_gps_tv02);
         tv03 = findViewById(R.id.ac_gps_tv03);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
         isGpsEnabled = locationManager.isProviderEnabled(GPS_LOCATION_NAME);
         textInfo.append(isGpsEnabled?"GPS定位功能已开启!\n":"GPS定位功能未开启!\n");
         list_provider = locationManager.getProviders(true);
-        for(String provider:list_provider){
-            textInfo.append("find provider:"+provider+".\n");
-            FlyLog.i("find provider:"+provider+".");
-            locationManager.requestLocationUpdates(provider, 1000, 0, this);
-        }
+        //for(String provider:list_provider){
+        //    textInfo.append("find provider:"+provider+".\n");
+        //    FlyLog.i("find provider:"+provider+".");
+        //    locationManager.requestLocationUpdates("gps", 1000, 0, this);
+        //}
+        locationManager.requestLocationUpdates("gps", 1000, 0, this);
         locationManager.addGpsStatusListener(this );
         tv03.setText(textInfo.toString());
     }
