@@ -17,19 +17,21 @@ public class MainActivity extends AppCompatActivity {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CAMERA
     };
-    private static int REQUEST_PERMISSION_CODE = 1;
+    private static int REQUEST_PERMISSION_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            for(int i=0;i<PERMISSIONS_STORAGE.length;i++)
-            if (ActivityCompat.checkSelfPermission(this, PERMISSIONS_STORAGE[i]) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
-                break;
+            for (String s : PERMISSIONS_STORAGE) {
+                if (ActivityCompat.checkSelfPermission(this, s) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, PERMISSIONS_STORAGE, REQUEST_PERMISSION_CODE);
+                    break;
+                }
             }
         }
     }
@@ -38,20 +40,20 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION_CODE) {
-            FlyLog.d("");
+            FlyLog.d("onRequestPermissionsResult");
         }
     }
 
     public void gpstest(View view) {
-        startActivity(new Intent(this,GpsActivity.class));
+        startActivity(new Intent(this, GpsActivity.class));
     }
 
     public void camera1test(View view) {
-        startActivity(new Intent(this,Camera1Activity.class));
+        startActivity(new Intent(this, Camera1Activity.class));
     }
 
     public void camera2test(View view) {
-        startActivity(new Intent(this,Camera2Activity.class));
+        startActivity(new Intent(this, Camera2Activity.class));
     }
 
     public void networktest(View view) {

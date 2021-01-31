@@ -189,5 +189,8 @@ public class Camera2Activity extends AppCompatActivity {
 //
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
