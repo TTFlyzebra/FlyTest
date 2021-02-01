@@ -41,12 +41,12 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         isGpsEnabled = locationManager.isProviderEnabled(GPS_LOCATION_NAME);
         textInfo.append(isGpsEnabled?"GPS定位功能已开启!\n":"GPS定位功能未开启!\n");
         list_provider = locationManager.getProviders(true);
-        //for(String provider:list_provider){
-        //    textInfo.append("find provider:"+provider+".\n");
-        //    FlyLog.i("find provider:"+provider+".");
-        //    locationManager.requestLocationUpdates("gps", 1000, 0, this);
-        //}
-        locationManager.requestLocationUpdates("gps", 1000, 0, this);
+        for(String provider:list_provider){
+            textInfo.append("find provider:"+provider+".\n");
+            FlyLog.i("find provider:"+provider+".");
+            locationManager.requestLocationUpdates("gps", 1000, 0, this);
+        }
+        //locationManager.requestLocationUpdates("gps", 1000, 0, this);
         locationManager.addGpsStatusListener(this );
         tv03.setText(textInfo.toString());
     }
