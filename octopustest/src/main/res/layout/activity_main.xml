@@ -35,4 +35,11 @@
         android:text="网络测试"
         android:onClick="networktest"/>
 
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="百度地图"
+        android:onClick="baidumap"/>
+
 </LinearLayout>

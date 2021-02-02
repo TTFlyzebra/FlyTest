@@ -59,4 +59,8 @@ public class MainActivity extends AppCompatActivity {
     public void networktest(View view) {
         startActivity(new Intent(this, NetworkActivity.class));
     }
+
+    public void baidumap(View view) {
+        startActivity(new Intent(this, BaiduMapActivity.class));
+    }
 }
