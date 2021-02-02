@@ -35,10 +35,12 @@ public class RootUtils
         File file = new File("/system/app/Superuser.apk");
         boolean find1 = file.exists();
 
-        File file1 = new File("/system/bin/sh");
-        boolean find2 = file1.exists();
+        //File file1 = new File("/system/bin/sh");
+        //boolean find2 = file1.exists();
 
-        if( find1 || find2 )
+        if( find1
+        //        || find2
+        )
             return true;
         else
             return false;

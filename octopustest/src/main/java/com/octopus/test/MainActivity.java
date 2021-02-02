@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void roottest(View view) {
+        startActivity(new Intent(this, RootTestActivity.class));
+    }
+
     public void gpstest(View view) {
         startActivity(new Intent(this, GpsActivity.class));
     }
@@ -64,4 +68,5 @@ public class MainActivity extends AppCompatActivity {
     public void baidumap(View view) {
         startActivity(new Intent(this, MapPlaceChooseActivity.class));
     }
+
 }

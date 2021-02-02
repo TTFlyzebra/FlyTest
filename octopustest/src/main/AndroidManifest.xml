@@ -27,6 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".RootTestActivity"/>
+
         <activity android:name=".GpsActivity"/>
 
         <activity android:name=".Camera1Activity"/>
@@ -34,8 +36,6 @@
         <activity android:name=".Camera2Activity"/>
 
         <activity android:name=".NetworkActivity"/>
-
-        <activity android:name=".BaiduMapActivity"/>
 
         <activity android:name=".placechoose.MapPlaceChooseActivity"/>
 
