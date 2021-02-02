@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.octopus.test.placechoose.MapPlaceChooseActivity;
 import com.octopus.test.utils.FlyLog;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +62,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void baidumap(View view) {
-        startActivity(new Intent(this, BaiduMapActivity.class));
+        startActivity(new Intent(this, MapPlaceChooseActivity.class));
     }
 }
