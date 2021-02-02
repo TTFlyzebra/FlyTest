@@ -1,4 +1,4 @@
-package com.flyzebra.octopus;
+package com.octopus.test;
 
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
@@ -11,7 +11,7 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.flyzebra.octopus.utils.FlyLog;
+import com.octopus.test.utils.FlyLog;
 
 public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.Callback{
 

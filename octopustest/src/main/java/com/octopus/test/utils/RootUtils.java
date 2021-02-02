@@ -1,4 +1,4 @@
-package com.flyzebra.octopus.utils;
+package com.octopus.test.utils;
 
 import java.io.BufferedReader;
 import java.io.File;

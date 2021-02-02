@@ -1,4 +1,4 @@
-package com.flyzebra.octopus;
+package com.octopus.test;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.flyzebra.octopus.utils.FlyLog;
+import com.octopus.test.utils.FlyLog;
 
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +44,7 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         for(String provider:list_provider){
             textInfo.append("find provider:"+provider+".\n");
             FlyLog.i("find provider:"+provider+".");
-            locationManager.requestLocationUpdates("gps", 1000, 0, this);
+            locationManager.requestLocationUpdates(provider, 1000, 0, this);
         }
         //locationManager.requestLocationUpdates("gps", 1000, 0, this);
         locationManager.addGpsStatusListener(this );

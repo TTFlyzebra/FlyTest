@@ -1,4 +1,4 @@
-package com.flyzebra.octopus;
+package com.octopus.test;
 
 import android.Manifest;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.flyzebra.octopus.utils.FlyLog;
+import com.octopus.test.utils.FlyLog;
 
 public class MainActivity extends AppCompatActivity {
     private static String[] PERMISSIONS_STORAGE = {
@@ -57,5 +57,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void networktest(View view) {
+        startActivity(new Intent(this, NetworkActivity.class));
     }
 }

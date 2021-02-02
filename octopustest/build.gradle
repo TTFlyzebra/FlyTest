@@ -22,7 +22,7 @@ android {
     buildToolsVersion "30.0.0"
 
     defaultConfig {
-        applicationId "com.flyzebra.octopus"
+        applicationId "com.octopus.test"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode gitCommitCount.toInteger()

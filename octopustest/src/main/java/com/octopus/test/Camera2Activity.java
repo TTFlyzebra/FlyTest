@@ -1,4 +1,4 @@
-package com.flyzebra.octopus;
+package com.octopus.test;
 
 import android.Manifest;
 import android.content.Context;
@@ -19,7 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.flyzebra.octopus.utils.CameraUtils;
+import com.octopus.test.utils.CameraUtils;
 
 import java.util.Arrays;
 
