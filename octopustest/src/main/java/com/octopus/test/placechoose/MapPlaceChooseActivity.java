@@ -26,6 +26,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.baidu.mapapi.utils.CoordinateConverter;
 import com.octopus.test.R;
+import com.octopus.test.utils.FlyLog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,8 +112,8 @@ public class MapPlaceChooseActivity extends AppCompatActivity
             return;
         }
 
-        // 设置初始中心点为北京
-        mCenter = new LatLng(39.963175, 116.400244);
+        // 设置初始中心点为国人通信大厦
+        mCenter = new LatLng(22.54920211102241,113.9473589934887);
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
         mBaiduMap.setMapStatus(mapStatusUpdate);
         mBaiduMap.setOnMapStatusChangeListener(this);
@@ -249,6 +250,8 @@ public class MapPlaceChooseActivity extends AppCompatActivity
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
         LatLng newCenter = mapStatus.target;
+
+        FlyLog.e(newCenter.latitude+","+newCenter.longitude);
 
         // 如果是点击poi item导致的地图状态更新，则不用做后面的逆地理请求，
         if (mStatusChangeByItemClick) {
