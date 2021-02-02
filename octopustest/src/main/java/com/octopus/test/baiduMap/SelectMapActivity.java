@@ -1,8 +1,12 @@
-package com.octopus.test.placechoose;
+package com.octopus.test.baiduMap;
 
+import android.content.Context;
 import android.graphics.Point;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,7 +28,6 @@ import com.baidu.mapapi.search.geocode.GeoCoder;
 import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.baidu.mapapi.utils.CoordinateConverter;
 import com.octopus.test.R;
 import com.octopus.test.utils.FlyLog;
 
@@ -34,13 +37,11 @@ import java.util.List;
 /**
  * 地图选点demo
  */
-public class MapPlaceChooseActivity extends AppCompatActivity
+public class SelectMapActivity extends AppCompatActivity
         implements BaiduMap.OnMapStatusChangeListener, PoiItemAdapter.MyOnItemClickListener
         , OnGetGeoCoderResultListener {
 
-    // 默认逆地理编码半径范围
     private static final int sDefaultRGCRadius = 500;
-    // 地图View实例
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private LatLng mCenter;
@@ -54,10 +55,15 @@ public class MapPlaceChooseActivity extends AppCompatActivity
 
     private boolean mStatusChangeByItemClick = false;
 
+    private TextView textinfo;
+
+    private double location[];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_choose_place_main);
+        textinfo = findViewById(R.id.textinfo);
         init();
     }
 
@@ -111,9 +117,8 @@ public class MapPlaceChooseActivity extends AppCompatActivity
         if (null == mBaiduMap) {
             return;
         }
-
         // 设置初始中心点为国人通信大厦
-        mCenter = new LatLng(22.54920211102241,113.9473589934887);
+        mCenter = new LatLng(22.542954645599487,113.9408379075131);
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
         mBaiduMap.setMapStatus(mapStatusUpdate);
         mBaiduMap.setOnMapStatusChangeListener(this);
@@ -244,14 +249,16 @@ public class MapPlaceChooseActivity extends AppCompatActivity
 
     @Override
     public void onMapStatusChange(MapStatus mapStatus) {
-
+        LatLng newCenter = mapStatus.target;
+        location = GpsTools.GCJ02ToWGS84(mCenter.longitude,mCenter.latitude);
+        textinfo.setText("WGS84:"+location[0]+","+location[1]);
+        FlyLog.e("GCJ02:"+newCenter.longitude+","+newCenter.latitude);
+        FlyLog.e("WGS84:"+location[0]+","+location[1]);
     }
 
     @Override
     public void onMapStatusChangeFinish(MapStatus mapStatus) {
         LatLng newCenter = mapStatus.target;
-
-        FlyLog.e(newCenter.latitude+","+newCenter.longitude);
 
         // 如果是点击poi item导致的地图状态更新，则不用做后面的逆地理请求，
         if (mStatusChangeByItemClick) {
@@ -266,6 +273,7 @@ public class MapPlaceChooseActivity extends AppCompatActivity
             mCenter = newCenter;
             reverseRequest(mCenter);
         }
+
     }
 
     @Override
@@ -279,13 +287,11 @@ public class MapPlaceChooseActivity extends AppCompatActivity
         mBaiduMap.setMapStatus(mapStatusUpdate);
     }
 
-    public LatLng ConvertGpsToBaidu(LatLng sourceLatLng) {
-        // 将GPS设备采集的原始GPS坐标转换成百度坐标
-        CoordinateConverter converter = new CoordinateConverter();
-        converter.from(CoordinateConverter.CoordType.GPS);
-        // sourceLatLng待转换坐标
-        converter.coord(sourceLatLng);
-        LatLng desLatLng = converter.convert();
-        return desLatLng;
+    public void saveLocation(View view) {
+        Bundle gpsInfo = Utils.getGpsInfo(location[0], location[1]);
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        lm.sendExtraCommand(LocationManager.GPS_PROVIDER, "simulate_gps_info", gpsInfo);
+        lm.sendExtraCommand(LocationManager.NETWORK_PROVIDER, "simulate_gps_info", gpsInfo);
+        lm.sendExtraCommand(LocationManager.PASSIVE_PROVIDER, "simulate_gps_info", gpsInfo);
     }
 }

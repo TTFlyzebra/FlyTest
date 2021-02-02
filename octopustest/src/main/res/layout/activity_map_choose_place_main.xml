@@ -1,33 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    tools:context=".placechoose.MapPlaceChooseActivity">
+    tools:context=".baiduMap.SelectMapActivity">
 
     <com.baidu.mapapi.map.MapView
         android:id="@+id/mapview"
-        app:layout_constraintBottom_toTopOf="@id/poi_list"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginBottom="@dimen/dp160"
-        tools:ignore="MissingConstraints">
-    </com.baidu.mapapi.map.MapView>
+        android:layout_height="match_parent"
+        android:layout_above="@+id/poi_list"
+        android:layout_alignParentTop="true"
+        tools:ignore="MissingConstraints"></com.baidu.mapapi.map.MapView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/poi_list"
-        app:layout_constraintTop_toBottomOf="@id/mapview"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/dp120"
+        android:layout_above="@+id/tm_ll01"
         android:scrollbarSize="@dimen/dp4"
-        android:scrollbars="vertical"
-        android:paddingBottom="@dimen/dp40"
-        android:layout_height="@dimen/dp200">
+        android:scrollbars="vertical"></androidx.recyclerview.widget.RecyclerView>
 
-    </androidx.recyclerview.widget.RecyclerView>
+    <LinearLayout
+        android:id="@+id/tm_ll01"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_above="@+id/textinfo"
+        android:background="#000"
+        android:orientation="horizontal" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/textinfo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp40"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:textColor="#000" />
+
+    <LinearLayout
+        android:layout_above="@+id/poi_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="saveLocation"
+            android:text="保存位置" />
+    </LinearLayout>
+</RelativeLayout>

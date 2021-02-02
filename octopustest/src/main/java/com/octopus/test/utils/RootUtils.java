@@ -92,6 +92,10 @@ public class RootUtils
             }
 
             if (file1.exists()) {
+                try{
+                    file1.delete();
+                }catch (Exception e){
+                }
                 return true;
             }
         } catch (Exception e) {

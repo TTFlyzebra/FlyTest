@@ -1,4 +1,4 @@
-package com.octopus.test.placechoose;
+package com.octopus.test.baiduMap;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
