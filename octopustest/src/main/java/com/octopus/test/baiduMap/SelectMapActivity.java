@@ -1,13 +1,18 @@
 package com.octopus.test.baiduMap;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
+import android.location.GpsStatus;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,34 +42,48 @@ import java.util.List;
 /**
  * 地图选点demo
  */
-public class SelectMapActivity extends AppCompatActivity
-        implements BaiduMap.OnMapStatusChangeListener, PoiItemAdapter.MyOnItemClickListener
-        , OnGetGeoCoderResultListener {
+public class SelectMapActivity extends AppCompatActivity implements
+        BaiduMap.OnMapStatusChangeListener,
+        PoiItemAdapter.MyOnItemClickListener,
+        OnGetGeoCoderResultListener,
+        LocationListener,
+        GpsStatus.Listener {
 
     private static final int sDefaultRGCRadius = 500;
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private LatLng mCenter;
     private Handler mHandler;
-
     private RecyclerView mRecyclerView;
-
     private PoiItemAdapter mPoiItemAdapter;
-
     private GeoCoder mGeoCoder = null;
-
     private boolean mStatusChangeByItemClick = false;
-
     private TextView textinfo;
-
     private double location[];
+    private LocationManager locationManager;
+    public static List<String> list_provider = null;
+    private boolean isGpsEnabled = false;
+    private boolean isFirstSetPoint = true;
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_choose_place_main);
         textinfo = findViewById(R.id.textinfo);
         init();
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
+        //判断是否开启GPS定位功能
+        isGpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        if (isGpsEnabled) {
+            list_provider = locationManager.getProviders(true);
+            for (String provider : list_provider) {
+                locationManager.requestLocationUpdates(provider, 1000, 0, this);
+            }
+            locationManager.addGpsStatusListener(this);
+        }
     }
 
     @Override
@@ -86,6 +105,8 @@ public class SelectMapActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        locationManager.removeUpdates(this);
 
         if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);
@@ -118,17 +139,6 @@ public class SelectMapActivity extends AppCompatActivity
             return;
         }
         // 设置初始中心点为国人通信大厦
-        mCenter = new LatLng(22.542954645599487,113.9408379075131);
-        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
-        mBaiduMap.setMapStatus(mapStatusUpdate);
-        mBaiduMap.setOnMapStatusChangeListener(this);
-        mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                createCenterMarker();
-                reverseRequest(mCenter);
-            }
-        });
     }
 
     /**
@@ -250,10 +260,10 @@ public class SelectMapActivity extends AppCompatActivity
     @Override
     public void onMapStatusChange(MapStatus mapStatus) {
         LatLng newCenter = mapStatus.target;
-        location = GpsTools.GCJ02ToWGS84(mCenter.longitude,mCenter.latitude);
-        textinfo.setText("WGS84:"+location[0]+","+location[1]);
-        FlyLog.e("GCJ02:"+newCenter.longitude+","+newCenter.latitude);
-        FlyLog.e("WGS84:"+location[0]+","+location[1]);
+        location = GpsTools.GCJ02ToWGS84(mCenter.longitude, mCenter.latitude);
+        textinfo.setText("WGS84:" + location[0] + "," + location[1]);
+        FlyLog.e("GCJ02:" + newCenter.longitude + "," + newCenter.latitude);
+        FlyLog.e("WGS84:" + location[0] + "," + location[1]);
     }
 
     @Override
@@ -293,5 +303,46 @@ public class SelectMapActivity extends AppCompatActivity
         lm.sendExtraCommand(LocationManager.GPS_PROVIDER, "simulate_gps_info", gpsInfo);
         lm.sendExtraCommand(LocationManager.NETWORK_PROVIDER, "simulate_gps_info", gpsInfo);
         lm.sendExtraCommand(LocationManager.PASSIVE_PROVIDER, "simulate_gps_info", gpsInfo);
+    }
+
+    @Override
+    public void onGpsStatusChanged(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        FlyLog.d("经度："+location.getLongitude()+"，纬度："+location.getLatitude());
+        if (isFirstSetPoint) {
+            double temp[] = GpsTools.WGS84ToGCJ02(location.getLongitude(),location.getLatitude());
+            FlyLog.e("经度："+temp[1]+"，纬度："+temp[0]);
+            mCenter = new LatLng(temp[1], temp[0]);
+            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
+            mBaiduMap.setMapStatus(mapStatusUpdate);
+            mBaiduMap.setOnMapStatusChangeListener(this);
+            mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+                @Override
+                public void onMapLoaded() {
+                    createCenterMarker();
+                    reverseRequest(mCenter);
+                }
+            });
+            isFirstSetPoint = false;
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+
     }
 }

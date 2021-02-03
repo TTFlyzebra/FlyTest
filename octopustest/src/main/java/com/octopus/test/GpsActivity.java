@@ -21,7 +21,6 @@ import java.util.List;
 @SuppressLint("MissingPermission")
 public class GpsActivity extends AppCompatActivity implements LocationListener, GpsStatus.Listener {
 
-    private static final String GPS_LOCATION_NAME = android.location.LocationManager.GPS_PROVIDER;
     private StringBuffer textInfo = new StringBuffer();
     private LocationManager locationManager;
     private boolean isGpsEnabled = false;
@@ -38,7 +37,7 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
-        isGpsEnabled = locationManager.isProviderEnabled(GPS_LOCATION_NAME);
+        isGpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
         textInfo.append(isGpsEnabled?"GPS定位功能已开启!\n":"GPS定位功能未开启!\n");
         list_provider = locationManager.getProviders(true);
         for(String provider:list_provider){
