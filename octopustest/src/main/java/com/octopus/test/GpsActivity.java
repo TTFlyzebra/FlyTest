@@ -37,7 +37,7 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
-        isGpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         textInfo.append(isGpsEnabled?"GPS定位功能已开启!\n":"GPS定位功能未开启!\n");
         list_provider = locationManager.getProviders(true);
         for(String provider:list_provider){
@@ -45,7 +45,7 @@ public class GpsActivity extends AppCompatActivity implements LocationListener, 
             FlyLog.i("find provider:"+provider+".");
             locationManager.requestLocationUpdates(provider, 1000, 0, this);
         }
-        //locationManager.requestLocationUpdates("gps", 1000, 0, this);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
         locationManager.addGpsStatusListener(this );
         tv03.setText(textInfo.toString());
     }

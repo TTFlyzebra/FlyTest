@@ -69,4 +69,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(this, SelectMapActivity.class));
     }
 
+    public void sim4gtest(View view) {
+        startActivity(new Intent(this, Sim4GActivity.class));
+    }
 }

@@ -1,2 +1,3 @@
+include ':octopuservice'
 include ':octopustest'
 rootProject.name = "FlyTest"

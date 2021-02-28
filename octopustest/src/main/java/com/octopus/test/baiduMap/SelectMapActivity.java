@@ -35,6 +35,7 @@ import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
 import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
 import com.octopus.test.R;
 import com.octopus.test.utils.FlyLog;
+import com.octopus.test.utils.SPUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class SelectMapActivity extends AppCompatActivity implements
     private GeoCoder mGeoCoder = null;
     private boolean mStatusChangeByItemClick = false;
     private TextView textinfo;
-    private double location[];
+    private double location[] = {22.546250932689176,113.93630403238355};
     private LocationManager locationManager;
     public static List<String> list_provider = null;
     private boolean isGpsEnabled = false;
@@ -139,6 +140,20 @@ public class SelectMapActivity extends AppCompatActivity implements
             return;
         }
         // 设置初始中心点为国人通信大厦
+        double temp[] = GpsTools.WGS84ToGCJ02(
+                Double.valueOf((String) SPUtil.get(this,"lon","113.9408379075131")),
+                Double.valueOf((String) SPUtil.get(this,"lat","22.542954645599487")));
+        mCenter = new LatLng(temp[1], temp[0]);
+        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
+        mBaiduMap.setMapStatus(mapStatusUpdate);
+        mBaiduMap.setOnMapStatusChangeListener(this);
+        mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                createCenterMarker();
+                reverseRequest(mCenter);
+            }
+        });
     }
 
     /**
@@ -151,8 +166,7 @@ public class SelectMapActivity extends AppCompatActivity implements
         }
 
         Point point = projection.toScreenLocation(mCenter);
-        BitmapDescriptor bitmapDescriptor =
-                BitmapDescriptorFactory.fromResource(R.drawable.icon_binding_point);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.icon_binding_point);
         if (null == bitmapDescriptor) {
             return;
         }
@@ -298,6 +312,8 @@ public class SelectMapActivity extends AppCompatActivity implements
     }
 
     public void saveLocation(View view) {
+        SPUtil.set(this,"lon",String.valueOf(location[0]));
+        SPUtil.set(this,"lat",String.valueOf(location[1]));
         Bundle gpsInfo = Utils.getGpsInfo(location[0], location[1]);
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         lm.sendExtraCommand(LocationManager.GPS_PROVIDER, "simulate_gps_info", gpsInfo);
@@ -312,23 +328,7 @@ public class SelectMapActivity extends AppCompatActivity implements
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        FlyLog.d("经度："+location.getLongitude()+"，纬度："+location.getLatitude());
-        if (isFirstSetPoint) {
-            double temp[] = GpsTools.WGS84ToGCJ02(location.getLongitude(),location.getLatitude());
-            FlyLog.e("经度："+temp[1]+"，纬度："+temp[0]);
-            mCenter = new LatLng(temp[1], temp[0]);
-            MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
-            mBaiduMap.setMapStatus(mapStatusUpdate);
-            mBaiduMap.setOnMapStatusChangeListener(this);
-            mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
-                @Override
-                public void onMapLoaded() {
-                    createCenterMarker();
-                    reverseRequest(mCenter);
-                }
-            });
-            isFirstSetPoint = false;
-        }
+
     }
 
     @Override
