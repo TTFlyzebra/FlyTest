@@ -13,7 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.octopus.test.utils.FlyLog;
 
-public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.Callback{
+public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private SurfaceView ac_main_sv;
     private Camera mCamera;
@@ -32,13 +32,13 @@ public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        if(mCamera==null){
+        if (mCamera == null) {
             mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
             try {
                 mCamera.setPreviewDisplay(ac_main_sv.getHolder());
                 Camera.Parameters param = mCamera.getParameters();
                 param.setJpegQuality(90);
-                param.setPreviewSize(param.getSupportedPreviewSizes().get(0).width,param.getSupportedPreviewSizes().get(0).height);
+                param.setPreviewSize(param.getSupportedPreviewSizes().get(0).width, param.getSupportedPreviewSizes().get(0).height);
                 param.setPreviewFormat(ImageFormat.NV21);
                 mCamera.setParameters(param);
                 setCameraDisplayOrientation();
@@ -67,10 +67,18 @@ public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0: degrees = 0; break;
-            case Surface.ROTATION_90: degrees = 90; break;
-            case Surface.ROTATION_180: degrees = 180; break;
-            case Surface.ROTATION_270: degrees = 270; break;
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
         }
         int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -81,7 +89,7 @@ public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.
             FlyLog.e("CAMERA_FACING_BACK");
             result = (info.orientation - degrees) % 360;
         }
-        FlyLog.e("info.orientation=%d, rotation=%d",info.orientation,result);
+        FlyLog.e("info.orientation=%d, rotation=%d", info.orientation, result);
         //旋转预览的角度
         mCamera.setDisplayOrientation(result);
         //-----------------------------

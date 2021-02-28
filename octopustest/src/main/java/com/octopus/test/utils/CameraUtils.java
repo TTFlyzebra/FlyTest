@@ -6,11 +6,15 @@ import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.Build;
 import android.util.Range;
 import android.util.Size;
 
+import androidx.annotation.RequiresApi;
+
 import java.util.Arrays;
 
+@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class CameraUtils {
 
     public static Size getCameraSize(Context context, int deviceWidth, int deviceHeigh) {
