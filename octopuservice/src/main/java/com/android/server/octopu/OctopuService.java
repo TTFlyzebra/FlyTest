@@ -24,7 +24,7 @@ public class OctopuService extends IOctopuService.Stub {
     }
 
     @Override
-    public void setSensorData(int type, float x, float y, float z, long time) throws RemoteException {
+    public void upSensorData(int type, float x, float y, float z, long time) throws RemoteException {
         notifySensorChange(type,x,y,z,time);
     }
 

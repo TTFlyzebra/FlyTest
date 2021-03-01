@@ -7,7 +7,7 @@ import android.octopu.OctopuListener;
 
 interface IOctopuService {
 
-    void setSensorData(int type, float x, float y, float z, long time);
+    void upSensorData(int type, float x, float y, float z, long time);
 
     void registerListener(OctopuListener octopuListener);
 

@@ -37,10 +37,10 @@ public class OctopuManager {
         }
     }
 
-    public void setSensorData(int type, float x, float y, float z, long time) {
+    public void upSensorData(int type, float x, float y, float z, long time) {
         try {
             if(mService!=null){
-                mService.setSensorData(type, x, y, z, time);
+                mService.upSensorData(type, x, y, z, time);
             }
         } catch (RemoteException e) {
             e.printStackTrace();
