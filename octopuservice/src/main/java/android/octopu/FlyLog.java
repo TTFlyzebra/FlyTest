@@ -1,4 +1,4 @@
-package com.octopu;
+package android.octopu;
 
 import android.util.Log;
 
