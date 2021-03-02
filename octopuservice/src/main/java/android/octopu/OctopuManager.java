@@ -113,7 +113,7 @@ public class OctopuManager {
         return null;
     }
 
-    void upCellData(Bundle bundle) {
+    public void upCellData(Bundle bundle) {
         try {
             if(mService!=null){
                 mService.upCellData(bundle);
@@ -134,7 +134,7 @@ public class OctopuManager {
         return null;
     }
 
-    void upWifiData(Bundle bundle) {
+    public void upWifiData(Bundle bundle) {
         try {
             if(mService!=null){
                 mService.upWifiData(bundle);
