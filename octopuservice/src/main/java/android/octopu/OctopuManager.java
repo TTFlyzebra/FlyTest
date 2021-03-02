@@ -22,15 +22,40 @@ public class OctopuManager {
     public static final String SENSOR_Z = "Z";
     public static final String SENSOR_TIME = "TIME";
 
-    private List<SenserListener> mSensorListeners = new ArrayList<>();
-    private final Object mListenerLock = new Object();
     private IOctopuService mService;
     private OctopuListener mOctopuListener = new OctopuListener.Stub() {
         @Override
         public void notifySensorChange(Bundle bundle) throws RemoteException {
-            synchronized (mListenerLock) {
+            synchronized (mSensorLock) {
                 for (SenserListener llstener : mSensorListeners) {
                     llstener.notifySensorChange(bundle);
+                }
+            }
+        }
+
+        @Override
+        public void notifyGpsChange(Bundle bundle) throws RemoteException {
+            synchronized (mGpsLock) {
+                for (GpsListener llstener : mGpsListeners) {
+                    llstener.notifyGpsChange(bundle);
+                }
+            }
+        }
+
+        @Override
+        public void notifyCellChange(Bundle bundle) throws RemoteException {
+            synchronized (mCellLock) {
+                for (CellListener llstener : mCellListeners) {
+                    llstener.notifyCellChange(bundle);
+                }
+            }
+        }
+
+        @Override
+        public void notifyWifiChange(Bundle bundle) throws RemoteException {
+            synchronized (mWifiLock) {
+                for (WifiListener llstener : mWifiListeners) {
+                    llstener.notifyWifiChange(bundle);
                 }
             }
         }
@@ -130,19 +155,75 @@ public class OctopuManager {
         return null;
     }
 
+    private List<SenserListener> mSensorListeners = new ArrayList<>();
+    private final Object mSensorLock = new Object();
     public interface SenserListener {
         void notifySensorChange(Bundle bundle);
     }
 
     public void addSensorListener(SenserListener senserListener) {
-        synchronized (mListenerLock) {
+        synchronized (mSensorLock) {
             mSensorListeners.add(senserListener);
         }
     }
 
     public void removeSensorListener(SenserListener senserListener) {
-        synchronized (mListenerLock) {
+        synchronized (mSensorLock) {
             mSensorListeners.remove(senserListener);
+        }
+    }
+
+    private List<GpsListener> mGpsListeners = new ArrayList<>();
+    private final Object mGpsLock = new Object();
+    public interface GpsListener {
+        void notifyGpsChange(Bundle bundle);
+    }
+
+    public void addSensorListener(GpsListener gpsListener) {
+        synchronized (mGpsLock) {
+            mGpsListeners.add(gpsListener);
+        }
+    }
+
+    public void removeSensorListener(GpsListener gpsListener) {
+        synchronized (mGpsLock) {
+            mGpsListeners.remove(gpsListener);
+        }
+    }
+
+    private List<CellListener> mCellListeners = new ArrayList<>();
+    private final Object mCellLock = new Object();
+    public interface CellListener {
+        void notifyCellChange(Bundle bundle);
+    }
+
+    public void addSensorListener(CellListener cellListener) {
+        synchronized (mCellLock) {
+            mCellListeners.add(cellListener);
+        }
+    }
+
+    public void removeSensorListener(CellListener cellListener) {
+        synchronized (mCellLock) {
+            mCellListeners.remove(cellListener);
+        }
+    }
+
+    private List<WifiListener> mWifiListeners = new ArrayList<>();
+    private final Object mWifiLock = new Object();
+    public interface WifiListener {
+        void notifyWifiChange(Bundle bundle);
+    }
+
+    public void addSensorListener(WifiListener wifiListener) {
+        synchronized (mWifiLock) {
+            mWifiListeners.add(wifiListener);
+        }
+    }
+
+    public void removeSensorListener(WifiListener wifiListener) {
+        synchronized (mWifiLock) {
+            mWifiListeners.remove(wifiListener);
         }
     }
 
