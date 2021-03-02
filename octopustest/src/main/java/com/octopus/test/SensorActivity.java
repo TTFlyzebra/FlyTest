@@ -23,12 +23,24 @@ public class SensorActivity extends AppCompatActivity implements OctopuManager.S
 
         mOctopuManager.addSensorListener(this);
         Bundle bundle = new Bundle();
-        bundle.putInt(OctopuManager.SENSOR_TYPE, 1);
+        bundle.putInt(OctopuManager.SENSOR_TYPE, 10);
         bundle.putFloat(OctopuManager.SENSOR_X, 1.01f);
         bundle.putFloat(OctopuManager.SENSOR_Y, 1.02f);
         bundle.putFloat(OctopuManager.SENSOR_Z, 1.03f);
+        bundle.getInt(OctopuManager.SENSOR_TYPE);
         bundle.putLong(OctopuManager.SENSOR_TIME, SystemClock.elapsedRealtime());
         mOctopuManager.upSensorData(bundle);
+
+        Bundle ret = mOctopuManager.getSensorData();
+
+        int type = ret.getInt(OctopuManager.SENSOR_TYPE);
+        float x = ret.getFloat(OctopuManager.SENSOR_X);
+        float y = ret.getFloat(OctopuManager.SENSOR_Y);
+        float z = ret.getFloat(OctopuManager.SENSOR_Z);
+        long time = ret.getLong(OctopuManager.SENSOR_TIME);
+        String s = String.format("Get:\ntype=%d, x=%f, y=%f, z=%f, time=%d\n", type, x, y, z, time);
+        text.append(s).append("\n");
+        textView.setText(text.toString());
     }
 
 
@@ -44,8 +56,9 @@ public class SensorActivity extends AppCompatActivity implements OctopuManager.S
         float x = bundle.getFloat(OctopuManager.SENSOR_X);
         float y = bundle.getFloat(OctopuManager.SENSOR_Y);
         float z = bundle.getFloat(OctopuManager.SENSOR_Z);
-        float time = bundle.getFloat(OctopuManager.SENSOR_TIME);
-        String s = String.format("type=%d, x=%f, y=%f, z=%f, time=%d\n", type, x, y, z, time);
-        textView.setText(s);
+        long time = bundle.getLong(OctopuManager.SENSOR_TIME);
+        String s = String.format("Listener:\ntype=%d, x=%f, y=%f, z=%f, time=%d\n", type, x, y, z, time);
+        text.append(s).append("\n");
+        textView.setText(text.toString());
     }
 }

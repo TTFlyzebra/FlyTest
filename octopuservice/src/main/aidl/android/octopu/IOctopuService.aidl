@@ -8,24 +8,24 @@ import android.os.Bundle;
 
 interface IOctopuService {
 
-    void upSensorData(in Bundle bundle);
-
-    Bundle getSensorData();
-
-    void upGpsData(in Bundle bundle);
-
-    Bundle getGpsData();
-
-    void upCellData(in Bundle bundle);
-
-    Bundle getCellData();
-
-    void upWifiData(in Bundle bundle);
-
-    Bundle getWifiData();
-
     void registerListener(OctopuListener octopuListener);
 
     void unregisterListener(OctopuListener octopuListener);
+
+    void upSensorData(inout Bundle bundle);
+
+    Bundle getSensorData();
+
+    void upGpsData(inout Bundle bundle);
+
+    Bundle getGpsData();
+
+    void upCellData(inout Bundle bundle);
+
+    Bundle getCellData();
+
+    void upWifiData(inout Bundle bundle);
+
+    Bundle getWifiData();
 
 }

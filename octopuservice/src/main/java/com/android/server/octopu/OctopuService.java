@@ -32,6 +32,16 @@ public class OctopuService extends IOctopuService.Stub {
     }
 
     @Override
+    public void registerListener(OctopuListener octopuListener) throws RemoteException {
+        mOctopuListeners.register(octopuListener);
+    }
+
+    @Override
+    public void unregisterListener(OctopuListener octopuListener) throws RemoteException {
+        mOctopuListeners.unregister(octopuListener);
+    }
+
+    @Override
     public void upSensorData(Bundle bundle) throws RemoteException {
         sensorBundle = bundle;
         notifySensorChange(sensorBundle);
@@ -45,7 +55,7 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public void upGpsData(Bundle bundle) throws RemoteException {
         gpsBundle = bundle;
-        notifyGpsChange(sensorBundle);
+        notifyGpsChange(gpsBundle);
     }
 
     @Override
@@ -56,7 +66,7 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public void upCellData(Bundle bundle) throws RemoteException {
         cellBundle = bundle;
-        notifyCellChange(sensorBundle);
+        notifyCellChange(cellBundle);
     }
 
     @Override
@@ -67,7 +77,7 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public void upWifiData(Bundle bundle) throws RemoteException {
         wifiBundle = bundle;
-        notifyWifiChange(sensorBundle);
+        notifyWifiChange(wifiBundle);
     }
 
     @Override
@@ -75,17 +85,7 @@ public class OctopuService extends IOctopuService.Stub {
         return wifiBundle;
     }
 
-    @Override
-    public void registerListener(OctopuListener octopuListener) throws RemoteException {
-        mOctopuListeners.register(octopuListener);
-    }
-
-    @Override
-    public void unregisterListener(OctopuListener octopuListener) throws RemoteException {
-        mOctopuListeners.unregister(octopuListener);
-    }
-
-    private void notifySensorChange(Bundle bundle) {
+    private void notifySensorChange(final Bundle bundle) {
         final int N = mOctopuListeners.beginBroadcast();
         for (int i = 0; i < N; i++) {
             try {
@@ -101,7 +101,7 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.finishBroadcast();
     }
 
-    private void notifyGpsChange(Bundle bundle) {
+    private void notifyGpsChange(final Bundle bundle) {
         final int N = mOctopuListeners.beginBroadcast();
         for (int i = 0; i < N; i++) {
             try {
@@ -117,7 +117,7 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.finishBroadcast();
     }
 
-    private void notifyCellChange(Bundle bundle) {
+    private void notifyCellChange(final Bundle bundle) {
         final int N = mOctopuListeners.beginBroadcast();
         for (int i = 0; i < N; i++) {
             try {
@@ -133,7 +133,7 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.finishBroadcast();
     }
 
-    private void notifyWifiChange(Bundle bundle) {
+    private void notifyWifiChange(final Bundle bundle) {
         final int N = mOctopuListeners.beginBroadcast();
         for (int i = 0; i < N; i++) {
             try {
