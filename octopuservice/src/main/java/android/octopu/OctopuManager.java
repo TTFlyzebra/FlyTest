@@ -178,14 +178,14 @@ public class OctopuManager {
         void notifyGpsChange(Bundle bundle);
     }
 
-    public void addSensorListener(GpsListener gpsListener) {
+    public void addGpsListener(GpsListener gpsListener) {
         registerLisenter();
         synchronized (mGpsLock) {
             mGpsListeners.add(gpsListener);
         }
     }
 
-    public void removeSensorListener(GpsListener gpsListener) {
+    public void removeGpsListener(GpsListener gpsListener) {
         synchronized (mGpsLock) {
             mGpsListeners.remove(gpsListener);
         }
@@ -199,14 +199,14 @@ public class OctopuManager {
         void notifyCellChange(Bundle bundle);
     }
 
-    public void addSensorListener(CellListener cellListener) {
+    public void addCellListener(CellListener cellListener) {
         registerLisenter();
         synchronized (mCellLock) {
             mCellListeners.add(cellListener);
         }
     }
 
-    public void removeSensorListener(CellListener cellListener) {
+    public void removeCellListener(CellListener cellListener) {
         synchronized (mCellLock) {
             mCellListeners.remove(cellListener);
         }
@@ -220,14 +220,14 @@ public class OctopuManager {
         void notifyWifiChange(Bundle bundle);
     }
 
-    public void addSensorListener(WifiListener wifiListener) {
+    public void addWifiListener(WifiListener wifiListener) {
         registerLisenter();
         synchronized (mWifiLock) {
             mWifiListeners.add(wifiListener);
         }
     }
 
-    public void removeSensorListener(WifiListener wifiListener) {
+    public void removeWifiListener(WifiListener wifiListener) {
         synchronized (mWifiLock) {
             mWifiListeners.remove(wifiListener);
         }
