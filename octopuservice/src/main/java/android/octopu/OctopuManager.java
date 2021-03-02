@@ -63,11 +63,6 @@ public class OctopuManager {
 
     public OctopuManager(Context context, IOctopuService octopuService) {
         mService = octopuService;
-        try {
-            mService.registerListener(mOctopuListener);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
     }
 
     public void upSensorData(Bundle bundle) {
@@ -162,6 +157,7 @@ public class OctopuManager {
     }
 
     public void addSensorListener(SensorListener sensorListener) {
+        registerLisenter();
         synchronized (mSensorLock) {
             mSensorListeners.add(sensorListener);
         }
@@ -171,6 +167,7 @@ public class OctopuManager {
         synchronized (mSensorLock) {
             mSensorListeners.remove(sensorListener);
         }
+        registerLisenter();
     }
 
     private List<GpsListener> mGpsListeners = new ArrayList<>();
@@ -180,6 +177,7 @@ public class OctopuManager {
     }
 
     public void addSensorListener(GpsListener gpsListener) {
+        registerLisenter();
         synchronized (mGpsLock) {
             mGpsListeners.add(gpsListener);
         }
@@ -189,6 +187,7 @@ public class OctopuManager {
         synchronized (mGpsLock) {
             mGpsListeners.remove(gpsListener);
         }
+        unregisterListener();
     }
 
     private List<CellListener> mCellListeners = new ArrayList<>();
@@ -198,6 +197,7 @@ public class OctopuManager {
     }
 
     public void addSensorListener(CellListener cellListener) {
+        registerLisenter();
         synchronized (mCellLock) {
             mCellListeners.add(cellListener);
         }
@@ -207,6 +207,7 @@ public class OctopuManager {
         synchronized (mCellLock) {
             mCellListeners.remove(cellListener);
         }
+        unregisterListener();
     }
 
     private List<WifiListener> mWifiListeners = new ArrayList<>();
@@ -216,6 +217,7 @@ public class OctopuManager {
     }
 
     public void addSensorListener(WifiListener wifiListener) {
+        registerLisenter();
         synchronized (mWifiLock) {
             mWifiListeners.add(wifiListener);
         }
@@ -224,6 +226,35 @@ public class OctopuManager {
     public void removeSensorListener(WifiListener wifiListener) {
         synchronized (mWifiLock) {
             mWifiListeners.remove(wifiListener);
+        }
+        unregisterListener();
+    }
+
+    private boolean isRegister = false;
+    private void registerLisenter(){
+        if(mService!=null && !isRegister){
+            try {
+                mService.registerListener(mOctopuListener);
+                isRegister = true;
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void unregisterListener(){
+        if(mSensorListeners.isEmpty()&&
+                mGpsListeners.isEmpty()&&
+                mCellListeners.isEmpty()&&
+                mWifiListeners.isEmpty()){
+            if(mService!=null){
+                try {
+                    mService.unregisterListener(mOctopuListener);
+                    isRegister = false;
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
