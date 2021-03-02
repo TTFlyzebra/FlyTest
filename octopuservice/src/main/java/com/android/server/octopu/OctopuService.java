@@ -45,6 +45,7 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public void upGpsData(Bundle bundle) throws RemoteException {
         gpsBundle = bundle;
+        notifyGpsChange(sensorBundle);
     }
 
     @Override
@@ -55,6 +56,7 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public void upCellData(Bundle bundle) throws RemoteException {
         cellBundle = bundle;
+        notifyCellChange(sensorBundle);
     }
 
     @Override
@@ -65,6 +67,7 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public void upWifiData(Bundle bundle) throws RemoteException {
         wifiBundle = bundle;
+        notifyWifiChange(sensorBundle);
     }
 
     @Override
@@ -88,6 +91,54 @@ public class OctopuService extends IOctopuService.Stub {
             try {
                 synchronized (mLock) {
                     mOctopuListeners.getBroadcastItem(i).notifySensorChange(bundle);
+                }
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+        mOctopuListeners.finishBroadcast();
+    }
+
+    private void notifyGpsChange(Bundle bundle) {
+        final int N = mOctopuListeners.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            try {
+                synchronized (mLock) {
+                    mOctopuListeners.getBroadcastItem(i).notifyGpsChange(bundle);
+                }
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+        mOctopuListeners.finishBroadcast();
+    }
+
+    private void notifyCellChange(Bundle bundle) {
+        final int N = mOctopuListeners.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            try {
+                synchronized (mLock) {
+                    mOctopuListeners.getBroadcastItem(i).notifyCellChange(bundle);
+                }
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+        mOctopuListeners.finishBroadcast();
+    }
+
+    private void notifyWifiChange(Bundle bundle) {
+        final int N = mOctopuListeners.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            try {
+                synchronized (mLock) {
+                    mOctopuListeners.getBroadcastItem(i).notifyWifiChange(bundle);
                 }
             } catch (RemoteException e) {
                 FlyLog.e(e.toString());
