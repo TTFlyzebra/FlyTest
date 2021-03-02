@@ -73,4 +73,8 @@ public class MainActivity extends AppCompatActivity {
     public void sim4gtest(View view) {
         startActivity(new Intent(this, Sim4GActivity.class));
     }
+
+    public void sensortest(View view) {
+        startActivity(new Intent(this, SensorActivity.class));
+    }
 }

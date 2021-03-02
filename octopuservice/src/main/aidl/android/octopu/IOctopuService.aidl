@@ -7,7 +7,21 @@ import android.octopu.OctopuListener;
 
 interface IOctopuService {
 
-    void upSensorData(int type, float x, float y, float z, long time);
+    void upSensorData(in Bundle bundle);
+
+    Bundle getSensorData();
+
+    void upGpsData(in Bundle bundle);
+
+    Bundle getGpsData();
+
+    void upCellData(in Bundle bundle);
+
+    Bundle getCellData();
+
+    void upWifiData(in Bundle bundle);
+
+    Bundle getWifiData();
 
     void registerListener(OctopuListener octopuListener);
 

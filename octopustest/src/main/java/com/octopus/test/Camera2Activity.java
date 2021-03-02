@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.octopus.test.utils.CameraUtils;
+import com.octopus.test.utils.FlyLog;
 
 import java.util.Arrays;
 
@@ -103,7 +104,13 @@ public class Camera2Activity extends AppCompatActivity implements TextureView.Su
 
     @Override
     public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
-        mCameraDevice.close();
+        try {
+            if (mCameraDevice != null) {
+                mCameraDevice.close();
+            }
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
         return false;
     }
 

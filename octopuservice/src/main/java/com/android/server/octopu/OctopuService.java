@@ -4,6 +4,7 @@ import android.content.Context;
 import android.octopu.FlyLog;
 import android.octopu.IOctopuService;
 import android.octopu.OctopuListener;
+import android.os.Bundle;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
@@ -19,13 +20,56 @@ public class OctopuService extends IOctopuService.Stub {
     private Context mContext;
     private static RemoteCallbackList<OctopuListener> mOctopuListeners = new RemoteCallbackList<>();
     private final Object mLock = new Object();
+
+    private Bundle sensorBundle;
+    private Bundle gpsBundle;
+    private Bundle cellBundle;
+    private Bundle wifiBundle;
+
+
     public OctopuService(Context context) {
         mContext = context;
     }
 
     @Override
-    public void upSensorData(int type, float x, float y, float z, long time) throws RemoteException {
-        notifySensorChange(type,x,y,z,time);
+    public void upSensorData(Bundle bundle) throws RemoteException {
+        sensorBundle = bundle;
+        notifySensorChange(sensorBundle);
+    }
+
+    @Override
+    public Bundle getSensorData() throws RemoteException {
+        return sensorBundle;
+    }
+
+    @Override
+    public void upGpsData(Bundle bundle) throws RemoteException {
+        gpsBundle = bundle;
+    }
+
+    @Override
+    public Bundle getGpsData() throws RemoteException {
+        return gpsBundle;
+    }
+
+    @Override
+    public void upCellData(Bundle bundle) throws RemoteException {
+        cellBundle = bundle;
+    }
+
+    @Override
+    public Bundle getCellData() throws RemoteException {
+        return cellBundle;
+    }
+
+    @Override
+    public void upWifiData(Bundle bundle) throws RemoteException {
+        wifiBundle = bundle;
+    }
+
+    @Override
+    public Bundle getWifiData() throws RemoteException {
+        return wifiBundle;
     }
 
     @Override
@@ -38,12 +82,12 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.unregister(octopuListener);
     }
 
-    private void notifySensorChange(int type, float x, float y, float z, long time) {
+    private void notifySensorChange(Bundle bundle) {
         final int N = mOctopuListeners.beginBroadcast();
         for (int i = 0; i < N; i++) {
             try {
                 synchronized (mLock) {
-                    mOctopuListeners.getBroadcastItem(i).notifySensorChange(type,  x,  y,  z, time);
+                    mOctopuListeners.getBroadcastItem(i).notifySensorChange(bundle);
                 }
             } catch (RemoteException e) {
                 FlyLog.e(e.toString());
@@ -53,7 +97,6 @@ public class OctopuService extends IOctopuService.Stub {
         }
         mOctopuListeners.finishBroadcast();
     }
-
 
 
 }

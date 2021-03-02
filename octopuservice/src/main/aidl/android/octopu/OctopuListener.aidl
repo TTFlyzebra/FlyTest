@@ -5,5 +5,6 @@ package android.octopu;
 
 interface OctopuListener {
 
-    void notifySensorChange(int type, float x, float y, float z, long time);
+    void notifySensorChange(out Bundle bundle);
+
 }
