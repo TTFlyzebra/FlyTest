@@ -67,7 +67,7 @@ public class OctopuManager {
 
     public void upSensorData(Bundle bundle) {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 mService.upSensorData(bundle);
             }
         } catch (RemoteException e) {
@@ -76,9 +76,9 @@ public class OctopuManager {
 
     }
 
-    public Bundle getSensorData(){
+    public Bundle getSensorData() {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 return mService.getSensorData();
             }
         } catch (RemoteException e) {
@@ -89,7 +89,7 @@ public class OctopuManager {
 
     public void upGpsData(Bundle bundle) {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 mService.upGpsData(bundle);
             }
         } catch (RemoteException e) {
@@ -97,9 +97,9 @@ public class OctopuManager {
         }
     }
 
-    public Bundle getGpsData(){
+    public Bundle getGpsData() {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 return mService.getGpsData();
             }
         } catch (RemoteException e) {
@@ -110,7 +110,7 @@ public class OctopuManager {
 
     public void upCellData(Bundle bundle) {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 mService.upCellData(bundle);
             }
         } catch (RemoteException e) {
@@ -118,9 +118,9 @@ public class OctopuManager {
         }
     }
 
-    public Bundle getCellData(){
+    public Bundle getCellData() {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 return mService.getCellData();
             }
         } catch (RemoteException e) {
@@ -131,7 +131,7 @@ public class OctopuManager {
 
     public void upWifiData(Bundle bundle) {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 mService.upWifiData(bundle);
             }
         } catch (RemoteException e) {
@@ -139,9 +139,9 @@ public class OctopuManager {
         }
     }
 
-    public Bundle getWifiData(){
+    public Bundle getWifiData() {
         try {
-            if(mService!=null){
+            if (mService != null) {
                 return mService.getWifiData();
             }
         } catch (RemoteException e) {
@@ -152,6 +152,7 @@ public class OctopuManager {
 
     private List<SensorListener> mSensorListeners = new ArrayList<>();
     private final Object mSensorLock = new Object();
+
     public interface SensorListener {
         void notifySensorChange(Bundle bundle);
     }
@@ -167,11 +168,12 @@ public class OctopuManager {
         synchronized (mSensorLock) {
             mSensorListeners.remove(sensorListener);
         }
-        registerLisenter();
+        unregisterListener();
     }
 
     private List<GpsListener> mGpsListeners = new ArrayList<>();
     private final Object mGpsLock = new Object();
+
     public interface GpsListener {
         void notifyGpsChange(Bundle bundle);
     }
@@ -192,6 +194,7 @@ public class OctopuManager {
 
     private List<CellListener> mCellListeners = new ArrayList<>();
     private final Object mCellLock = new Object();
+
     public interface CellListener {
         void notifyCellChange(Bundle bundle);
     }
@@ -212,6 +215,7 @@ public class OctopuManager {
 
     private List<WifiListener> mWifiListeners = new ArrayList<>();
     private final Object mWifiLock = new Object();
+
     public interface WifiListener {
         void notifyWifiChange(Bundle bundle);
     }
@@ -231,8 +235,9 @@ public class OctopuManager {
     }
 
     private boolean isRegister = false;
-    private void registerLisenter(){
-        if(mService!=null && !isRegister){
+
+    private void registerLisenter() {
+        if (mService != null && !isRegister) {
             try {
                 mService.registerListener(mOctopuListener);
                 isRegister = true;
@@ -242,12 +247,10 @@ public class OctopuManager {
         }
     }
 
-    private void unregisterListener(){
-        if(mSensorListeners.isEmpty()&&
-                mGpsListeners.isEmpty()&&
-                mCellListeners.isEmpty()&&
-                mWifiListeners.isEmpty()){
-            if(mService!=null){
+    private void unregisterListener() {
+        if (mSensorListeners.isEmpty() && mGpsListeners.isEmpty() &&
+                mCellListeners.isEmpty() && mWifiListeners.isEmpty()) {
+            if (mService != null) {
                 try {
                     mService.unregisterListener(mOctopuListener);
                     isRegister = false;
