@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SensorActivity extends AppCompatActivity implements OctopuManager.SenserListener {
+public class SensorActivity extends AppCompatActivity implements OctopuManager.SensorListener {
     private TextView textView;
     private StringBuffer text = new StringBuffer();
     private OctopuManager mOctopuManager;

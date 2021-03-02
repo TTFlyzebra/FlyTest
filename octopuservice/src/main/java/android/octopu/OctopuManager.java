@@ -27,7 +27,7 @@ public class OctopuManager {
         @Override
         public void notifySensorChange(Bundle bundle) throws RemoteException {
             synchronized (mSensorLock) {
-                for (SenserListener llstener : mSensorListeners) {
+                for (SensorListener llstener : mSensorListeners) {
                     llstener.notifySensorChange(bundle);
                 }
             }
@@ -155,21 +155,21 @@ public class OctopuManager {
         return null;
     }
 
-    private List<SenserListener> mSensorListeners = new ArrayList<>();
+    private List<SensorListener> mSensorListeners = new ArrayList<>();
     private final Object mSensorLock = new Object();
-    public interface SenserListener {
+    public interface SensorListener {
         void notifySensorChange(Bundle bundle);
     }
 
-    public void addSensorListener(SenserListener senserListener) {
+    public void addSensorListener(SensorListener sensorListener) {
         synchronized (mSensorLock) {
-            mSensorListeners.add(senserListener);
+            mSensorListeners.add(sensorListener);
         }
     }
 
-    public void removeSensorListener(SenserListener senserListener) {
+    public void removeSensorListener(SensorListener sensorListener) {
         synchronized (mSensorLock) {
-            mSensorListeners.remove(senserListener);
+            mSensorListeners.remove(sensorListener);
         }
     }
 
