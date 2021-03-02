@@ -15,6 +15,13 @@ import java.util.List;
  * Date: 20-1-8 下午5:44
  */
 public class OctopuManager {
+
+    public static final String SENSOR_TYPE = "TYPE";
+    public static final String SENSOR_X = "X";
+    public static final String SENSOR_Y = "Y";
+    public static final String SENSOR_Z = "Z";
+    public static final String SENSOR_TIME = "TIME";
+
     private List<SenserListener> mSensorListeners = new ArrayList<>();
     private final Object mListenerLock = new Object();
     private IOctopuService mService;
