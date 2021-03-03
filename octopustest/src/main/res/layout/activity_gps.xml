@@ -13,7 +13,28 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/ac_gps_tv01"
+            android:id="@+id/ac_gps_tv_gps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/ac_gps_tv_passive"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/ac_gps_tv_network"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left|center_vertical"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/ac_gps_tv_unknow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
