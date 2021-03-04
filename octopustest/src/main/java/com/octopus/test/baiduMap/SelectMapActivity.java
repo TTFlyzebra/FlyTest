@@ -7,8 +7,10 @@ import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.octopu.OctopuManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.View;
 import android.widget.TextView;
 
@@ -65,8 +67,9 @@ public class SelectMapActivity extends AppCompatActivity implements
     public static List<String> list_provider = null;
     private boolean isGpsEnabled = false;
     private boolean isFirstSetPoint = true;
+    private OctopuManager mOctopuManager;
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint({"MissingPermission", "WrongConstant"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +78,8 @@ public class SelectMapActivity extends AppCompatActivity implements
         init();
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        mOctopuManager = (OctopuManager) getSystemService("octopu");
+
         locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
         isGpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
@@ -314,11 +319,15 @@ public class SelectMapActivity extends AppCompatActivity implements
     public void saveLocation(View view) {
         SPUtil.set(this,"lon",String.valueOf(location[0]));
         SPUtil.set(this,"lat",String.valueOf(location[1]));
-        Bundle gpsInfo = Utils.getGpsInfo(location[0], location[1]);
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        lm.sendExtraCommand(LocationManager.GPS_PROVIDER, "simulate_gps_info", gpsInfo);
-        lm.sendExtraCommand(LocationManager.NETWORK_PROVIDER, "simulate_gps_info", gpsInfo);
-        lm.sendExtraCommand(LocationManager.PASSIVE_PROVIDER, "simulate_gps_info", gpsInfo);
+        Bundle gpsData = new Bundle();
+        Location loc = new Location("gps");
+        loc.setLongitude(location[0]);
+        loc.setLatitude(location[1]);
+        loc.setAccuracy(10.0F);
+        loc.setTime(SystemClock.elapsedRealtime());
+        loc.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
+        gpsData.putParcelable("LOCATION",loc);
+        mOctopuManager.upGpsData(gpsData);
     }
 
     @Override
