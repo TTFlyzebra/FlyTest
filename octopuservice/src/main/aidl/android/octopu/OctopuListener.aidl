@@ -7,12 +7,12 @@ import android.os.Bundle;
 
 interface OctopuListener {
 
-    void notifySensorChange(inout Bundle bundle);
+    oneway void notifySensorChange(in Bundle bundle);
 
-    void notifyGpsChange(inout Bundle bundle);
+    oneway void notifyGpsChange(in Bundle bundle);
 
-    void notifyCellChange(inout Bundle bundle);
+    oneway void notifyCellChange(in Bundle bundle);
 
-    void notifyWifiChange(inout Bundle bundle);
+    oneway void notifyWifiChange(in Bundle bundle);
 
 }

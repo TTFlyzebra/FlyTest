@@ -27,6 +27,7 @@ public class Sim4GActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sim4g);
+
         textView = findViewById(R.id.ac_sim4g_tv03);
 
         tel = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
