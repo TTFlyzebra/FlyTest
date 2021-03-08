@@ -85,7 +85,7 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         tv_unknow = findViewById(R.id.ac_gps_tv_unknow);
         tv02 = findViewById(R.id.ac_gps_tv02);
         tv03 = findViewById(R.id.ac_gps_tv03);
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
         isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -165,7 +165,7 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
                 if (s.usedInFix()) {
                     count2++;
                 }
-                FlyLog.d("Almanac=%b, Ephemeris=%b, Azimuth=%f, Elevation=%f, Snr=%f, Prn=%s",s.hasAlmanac(),s.hasEphemeris(), s.getAzimuth(),s.getElevation(),s.getSnr(),s.getPrn());
+                //FlyLog.d("Almanac=%b, Ephemeris=%b, Azimuth=%f, Elevation=%f, Snr=%f, Prn=%s",s.hasAlmanac(),s.hasEphemeris(), s.getAzimuth(),s.getElevation(),s.getSnr(),s.getPrn());
             }
             FlyLog.d("卫星总数：" + count1 + "，有效卫星：" + count2 + "。");
             tv02.setText("卫星总数：" + count1 + "\n有效卫星：" + count2 + "。");

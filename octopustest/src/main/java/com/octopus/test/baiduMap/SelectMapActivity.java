@@ -326,8 +326,12 @@ public class SelectMapActivity extends AppCompatActivity implements
         loc.setAccuracy(10.0F);
         loc.setTime(SystemClock.elapsedRealtime());
         loc.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
-        gpsData.putParcelable("LOCATION",loc);
+        gpsData.putParcelable(OctopuManager.GPS_LOCATION,loc);
         mOctopuManager.upGpsData(gpsData);
+
+        Bundle cellData = new Bundle();
+        cellData.putParcelableArrayList(OctopuManager.CELL_LIST,new ArrayList<>());
+        mOctopuManager.upCellData(cellData);
     }
 
     @Override

@@ -21,6 +21,11 @@ public class OctopuManager {
     public static final String SENSOR_Y = "Y";
     public static final String SENSOR_Z = "Z";
     public static final String SENSOR_TIME = "TIME";
+    public static final String GPS_LOCATION = "LOCATION";
+    public static final String GPS_STARLIST = "STARLIST";
+    public static final String CELL_LIST = "CELLLIST";
+    public static final String WIFI_LIST = "WIFILIST";
+
 
     private IOctopuService mService;
     private OctopuListener mOctopuListener = new OctopuListener.Stub() {

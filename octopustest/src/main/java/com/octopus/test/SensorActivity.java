@@ -46,7 +46,7 @@ public class SensorActivity extends AppCompatActivity implements OctopuManager.S
 
 
             Bundle bundleCell = new Bundle();
-            bundleCell.putParcelableArrayList("CELLLIST",new ArrayList<>());
+            bundleCell.putParcelableArrayList(OctopuManager.CELL_LIST,new ArrayList<>());
             mOctopuManager.upCellData(bundleCell);
             Bundle ret1 = mOctopuManager.getCellData();
             text.append("Cell:\n").append(ret1.toString()).append("\n\n");
