@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.octopus.test.utils.DateUtils;
 import com.octopus.test.utils.FlyLog;
 
 import java.util.ArrayList;
@@ -44,16 +45,16 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
             FlyLog.i("[" + provider + "]经度：" + location.getLongitude() + "，纬度：" + location.getLatitude());
             switch (provider){
                 case LocationManager.GPS_PROVIDER:
-                    tv_gps.setText("[" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_gps.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
                 case LocationManager.NETWORK_PROVIDER:
-                    tv_network.setText("[" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_network.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
                 case LocationManager.PASSIVE_PROVIDER:
-                    tv_passive.setText("[" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_passive.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
                 default:
-                    tv_unknow.setText("[unknow]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_unknow.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][unknow]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
             }
         }
@@ -164,6 +165,7 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
                 if (s.usedInFix()) {
                     count2++;
                 }
+                FlyLog.d("Almanac=%b, Ephemeris=%b, Azimuth=%f, Elevation=%f, Snr=%f, Prn=%s",s.hasAlmanac(),s.hasEphemeris(), s.getAzimuth(),s.getElevation(),s.getSnr(),s.getPrn());
             }
             FlyLog.d("卫星总数：" + count1 + "，有效卫星：" + count2 + "。");
             tv02.setText("卫星总数：" + count1 + "\n有效卫星：" + count2 + "。");

@@ -24,10 +24,10 @@ android {
 
     task makeJar(type: Copy) {
         delete 'build/libs/octopu.jar'
-        from('build/intermediates/aar_main_jar/release/') //jar文件来源
-        into('build/libs/') //生成路径
+        from('build/intermediates/aar_main_jar/release/')
+        into('../octopustest/libs/')
         include('classes.jar')
-        rename('classes.jar', 'octopu.jar') //命名为network.jar
+        rename('classes.jar', 'octopu.jar')
     }
 
     makeJar.dependsOn(build)
