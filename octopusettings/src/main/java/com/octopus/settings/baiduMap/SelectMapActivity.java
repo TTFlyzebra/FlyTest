@@ -1,12 +1,10 @@
 package com.octopus.settings.baiduMap;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.graphics.Point;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.octopu.OctopuManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,7 +61,7 @@ public class SelectMapActivity extends AppCompatActivity implements
     private boolean mStatusChangeByItemClick = false;
     private TextView textinfo;
     private double location[] = {22.546250932689176,113.93630403238355};
-    private LocationManager locationManager;
+    //private LocationManager locationManager;
     public static List<String> list_provider = null;
     private boolean isGpsEnabled = false;
     private boolean isFirstSetPoint = true;
@@ -77,19 +75,19 @@ public class SelectMapActivity extends AppCompatActivity implements
         textinfo = findViewById(R.id.textinfo);
         init();
 
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        //locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         mOctopuManager = (OctopuManager) getSystemService("octopu");
 
-        locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
+        //locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
-        isGpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
-        if (isGpsEnabled) {
-            list_provider = locationManager.getProviders(true);
-            for (String provider : list_provider) {
-                locationManager.requestLocationUpdates(provider, 1000, 0, this);
-            }
-            locationManager.addGpsStatusListener(this);
-        }
+        //isGpsEnabled = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+        //if (isGpsEnabled) {
+        //    list_provider = locationManager.getProviders(true);
+        //    for (String provider : list_provider) {
+        //        locationManager.requestLocationUpdates(provider, 1000, 0, this);
+        //    }
+        //    locationManager.addGpsStatusListener(this);
+        //}
     }
 
     @Override
@@ -112,7 +110,7 @@ public class SelectMapActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
 
-        locationManager.removeUpdates(this);
+        //locationManager.removeUpdates(this);
 
         if (null != mHandler) {
             mHandler.removeCallbacksAndMessages(null);

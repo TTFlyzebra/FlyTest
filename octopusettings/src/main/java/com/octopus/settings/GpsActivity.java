@@ -13,6 +13,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
+import com.octopus.settings.baiduMap.GpsTools;
 import com.octopus.settings.utils.DateUtils;
 import com.octopus.settings.utils.FlyLog;
 
@@ -22,6 +29,8 @@ import java.util.List;
 
 @SuppressLint("MissingPermission")
 public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener {
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
 
     private StringBuffer textInfo = new StringBuffer();
     private LocationManager locationManager;
@@ -43,20 +52,22 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         public void onLocationChanged(@NonNull Location location) {
             FlyLog.i("onLocationChanged, location=%s", location.toString());
             FlyLog.i("[" + provider + "]经度：" + location.getLongitude() + "，纬度：" + location.getLatitude());
-            switch (provider){
+            switch (provider) {
                 case LocationManager.GPS_PROVIDER:
-                    tv_gps.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_gps.setText("[" + DateUtils.getCurrentDate("HH:mm:ss") + "][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
                 case LocationManager.NETWORK_PROVIDER:
-                    tv_network.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_network.setText("[" + DateUtils.getCurrentDate("HH:mm:ss") + "][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
                 case LocationManager.PASSIVE_PROVIDER:
-                    tv_passive.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_passive.setText("[" + DateUtils.getCurrentDate("HH:mm:ss") + "][" + provider + "]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
                 default:
-                    tv_unknow.setText("["+ DateUtils.getCurrentDate("HH:mm:ss") +"][unknow]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+                    tv_unknow.setText("[" + DateUtils.getCurrentDate("HH:mm:ss") + "][unknow]\n经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
                     break;
             }
+
+            goBaiduLocation(location);
         }
 
         @Override
@@ -73,12 +84,18 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         public void onProviderDisabled(@NonNull String provider) {
             FlyLog.i("onProviderDisabled, provider=%s.", provider);
         }
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gps);
+        mMapView = findViewById(R.id.ac_baidumap);
+        mMapView.showZoomControls(false);
+
+        mBaiduMap = mMapView.getMap();
+
         tv_gps = findViewById(R.id.ac_gps_tv_gps);
         tv_passive = findViewById(R.id.ac_gps_tv_passive);
         tv_network = findViewById(R.id.ac_gps_tv_network);
@@ -102,15 +119,60 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         tv03.setText(textInfo.toString());
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mBaiduMap.setMyLocationEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (null != mMapView) {
+            mMapView.onResume();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (null != mMapView) {
+            mMapView.onPause();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        mBaiduMap.setMyLocationEnabled(false);
+        super.onStop();
+    }
 
     @Override
     protected void onDestroy() {
+        if (null != mMapView) {
+            mMapView.onDestroy();
+        }
         for (LocationListener listener : listeners) {
             locationManager.removeUpdates(listener);
         }
         locationManager.removeGpsStatusListener(this);
         super.onDestroy();
 
+    }
+
+    public void goBaiduLocation(Location location) {
+        if (location != null) {
+            double loc[] = GpsTools.WGS84ToGCJ02(location.getLongitude(), location.getLatitude());
+            LatLng ll = new LatLng(loc[1], loc[0]);
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll,16);
+            mBaiduMap.animateMapStatus(u);
+            MyLocationData myLocationData = new MyLocationData.Builder().accuracy(location.getAccuracy())
+                    .direction(location.getBearing())
+                    .latitude(loc[1])
+                    .longitude(loc[0])
+                    .build();
+            mBaiduMap.setMyLocationData(myLocationData);
+        }
     }
 
     @Override
@@ -169,7 +231,7 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
                 //FlyLog.d("Almanac=%b, Ephemeris=%b, Azimuth=%f, Elevation=%f, Snr=%f, Prn=%s",s.hasAlmanac(),s.hasEphemeris(), s.getAzimuth(),s.getElevation(),s.getSnr(),s.getPrn());
             }
             FlyLog.d("卫星总数：" + count1 + "，有效卫星：" + count2 + "。");
-            tv02.setText("卫星总数：" + count1 + "\n有效卫星：" + count2 + "。");
+            tv02.setText("卫星总数：" + count1 + "，有效卫星：" + count2 + "。");
         }
         tv03.setText(textInfo.toString());
     }

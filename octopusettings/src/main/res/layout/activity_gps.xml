@@ -1,62 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <com.baidu.mapapi.map.MapView
+        android:id="@+id/ac_baidumap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="#000"
+        android:weightSum="2"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/ac_gps_tv_gps"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:textColor="#000" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="left|top"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/ac_gps_tv_passive"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:textColor="#000" />
+            <TextView
+                android:id="@+id/ac_gps_tv02"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:textColor="#0F0" />
 
-        <TextView
-            android:id="@+id/ac_gps_tv_network"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:textColor="#000" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#0F0"/>
 
-        <TextView
-            android:id="@+id/ac_gps_tv_unknow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:textColor="#000" />
+            <TextView
+                android:id="@+id/ac_gps_tv_gps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:textColor="#0F0" />
 
-        <TextView
-            android:id="@+id/ac_gps_tv02"
+            <TextView
+                android:id="@+id/ac_gps_tv_passive"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:textColor="#0F0" />
+
+            <TextView
+                android:id="@+id/ac_gps_tv_network"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:textColor="#0F0" />
+
+            <TextView
+                android:id="@+id/ac_gps_tv_unknow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:textColor="#0F0" />
+        </LinearLayout>
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:textColor="#000" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/ac_gps_tv03"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#F00"/>
+        </ScrollView>
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="50dp">
-
-        <TextView
-            android:id="@+id/ac_gps_tv03"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </ScrollView>
-
-</LinearLayout>
+</RelativeLayout>
