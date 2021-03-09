@@ -324,6 +324,9 @@ public class SelectMapActivity extends AppCompatActivity implements
         loc.setLongitude(location[0]);
         loc.setLatitude(location[1]);
         loc.setAccuracy(10.0F);
+        loc.setAltitude(200.0D);
+        loc.setBearing(20.0F);
+        loc.setSpeed(0.1F);
         loc.setTime(SystemClock.elapsedRealtime());
         loc.setElapsedRealtimeNanos(SystemClock.elapsedRealtimeNanos());
         gpsData.putParcelable(OctopuManager.GPS_LOCATION,loc);

@@ -108,6 +108,7 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         for (LocationListener listener : listeners) {
             locationManager.removeUpdates(listener);
         }
+        locationManager.removeGpsStatusListener(this);
         super.onDestroy();
 
     }
