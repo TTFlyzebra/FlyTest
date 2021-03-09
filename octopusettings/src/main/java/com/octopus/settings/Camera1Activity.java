@@ -7,16 +7,21 @@ import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.octopus.settings.utils.FlyLog;
+import com.octopus.settings.utils.SystemPropTools;
 
 public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     private SurfaceView ac_main_sv;
     private Camera mCamera;
+    private EditText et_webcam_url;
+    private static final String WEBCAM_URL = "persist.sys.webcam.url";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +29,20 @@ public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.
         setContentView(R.layout.activity_camera1);
 
         ac_main_sv = findViewById(R.id.ac_main_sv);
-
         ac_main_sv.getHolder().addCallback(this);
         ac_main_sv.getHolder().setFormat(PixelFormat.YCbCr_420_SP);
+
+        et_webcam_url = findViewById(R.id.et_webcam_url);
+        et_webcam_url.setText(SystemPropTools.get(WEBCAM_URL, ""));
 
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        openCamera();
+    }
+
+    private void openCamera() {
         if (mCamera == null) {
             mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
             try {
@@ -55,6 +66,10 @@ public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+        closeCamera();
+    }
+
+    private void closeCamera() {
         mCamera.setPreviewCallback(null);
         mCamera.stopPreview();
         mCamera.release();
@@ -97,5 +112,15 @@ public class Camera1Activity extends AppCompatActivity implements SurfaceHolder.
         //Camera.Parameters param = mCamera.getParameters();
         //param.setRotation(result);
         //mCamera.setParameters(param);
+    }
+
+    public void onSaveSetting(View view) {
+        try {
+            SystemPropTools.set(WEBCAM_URL, et_webcam_url.getText().toString());
+            closeCamera();
+            openCamera();
+        } catch (Exception e) {
+            FlyLog.e(e.toString());
+        }
     }
 }

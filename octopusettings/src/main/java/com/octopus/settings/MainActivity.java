@@ -1,6 +1,7 @@
 package com.octopus.settings;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -59,7 +60,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void camera2test(View view) {
-        startActivity(new Intent(this, Camera2Activity.class));
+//        startActivity(new Intent(this, Camera2Activity.class));
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        ComponentName cn = new ComponentName("com.flyzebra.player", "com.flyzebra.player.MainActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setComponent(cn);
+        startActivity(intent);
     }
 
     public void networktest(View view) {

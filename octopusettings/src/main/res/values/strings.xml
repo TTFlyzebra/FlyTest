@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">OcSettings</string>
+
+    <string name="camera1">Camera设置</string>
+    <string name="camera2">WebCam设置</string>
+
+    <string name="webcam_url">媒体文件地址：</string>
+    <string name="default_webcam_url">/sdcard/camera/camera.mp4</string>
 </resources>

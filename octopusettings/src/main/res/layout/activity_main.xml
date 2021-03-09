@@ -3,64 +3,70 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:onClick="baidumap"
+        android:text="地图选点定位" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="gpstest"
+        android:text="GPS定位信息" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="roottest"
         android:text="Root检测"
-        android:onClick="roottest"/>
+        android:visibility="gone" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Camera1"
-        android:onClick="camera1test"/>
+        android:onClick="camera1test"
+        android:text="@string/camera1"
+        android:textAllCaps="false" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Camera2"
-        android:onClick="camera2test"/>
+        android:onClick="camera2test"
+        android:text="@string/camera2"
+        android:textAllCaps="false" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="地图选点"
-        android:onClick="baidumap"/>
-
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="GPS测试"
-        android:onClick="gpstest"/>
-
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:onClick="sim4gtest"
         android:text="4G测试"
-        android:onClick="sim4gtest"/>
+        android:visibility="gone" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:onClick="sensortest"
         android:text="传感器测试"
-        android:onClick="sensortest"/>
+        android:visibility="gone" />
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:onClick="networktest"
         android:text="网络测试"
-        android:onClick="networktest"/>
+        android:visibility="gone" />
 
 </LinearLayout>
