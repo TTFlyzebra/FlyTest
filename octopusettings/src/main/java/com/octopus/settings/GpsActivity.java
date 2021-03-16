@@ -102,7 +102,7 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         tv_unknow = findViewById(R.id.ac_gps_tv_unknow);
         tv02 = findViewById(R.id.ac_gps_tv02);
         tv03 = findViewById(R.id.ac_gps_tv03);
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
         isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -152,19 +152,22 @@ public class GpsActivity extends AppCompatActivity implements GpsStatus.Listener
         if (null != mMapView) {
             mMapView.onDestroy();
         }
+        if (mBaiduMap != null) {
+            mBaiduMap.animateMapStatus(null);
+        }
+        locationManager.removeGpsStatusListener(this);
         for (LocationListener listener : listeners) {
             locationManager.removeUpdates(listener);
         }
-        locationManager.removeGpsStatusListener(this);
+        listeners.clear();
         super.onDestroy();
-
     }
 
     public void goBaiduLocation(Location location) {
         if (location != null) {
             double loc[] = GpsTools.WGS84ToGCJ02(location.getLongitude(), location.getLatitude());
             LatLng ll = new LatLng(loc[1], loc[0]);
-            MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll,16);
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(ll, 16);
             mBaiduMap.animateMapStatus(u);
             MyLocationData myLocationData = new MyLocationData.Builder().accuracy(location.getAccuracy())
                     .direction(location.getBearing())

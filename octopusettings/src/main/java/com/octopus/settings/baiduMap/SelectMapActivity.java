@@ -1,10 +1,12 @@
 package com.octopus.settings.baiduMap;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Point;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.octopu.OctopuManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -61,7 +63,7 @@ public class SelectMapActivity extends AppCompatActivity implements
     private boolean mStatusChangeByItemClick = false;
     private TextView textinfo;
     private double location[] = {22.546250932689176,113.93630403238355};
-    //private LocationManager locationManager;
+    private LocationManager locationManager;
     public static List<String> list_provider = null;
     private boolean isGpsEnabled = false;
     private boolean isFirstSetPoint = true;
@@ -75,8 +77,8 @@ public class SelectMapActivity extends AppCompatActivity implements
         textinfo = findViewById(R.id.textinfo);
         init();
 
-        //locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        mOctopuManager = (OctopuManager) getSystemService("octopu");
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        mOctopuManager = (OctopuManager) getApplicationContext().getSystemService("octopu");
 
         //locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
@@ -317,6 +319,13 @@ public class SelectMapActivity extends AppCompatActivity implements
     public void saveLocation(View view) {
         SPUtil.set(this,"lon",String.valueOf(location[0]));
         SPUtil.set(this,"lat",String.valueOf(location[1]));
+
+        //清除sendExtraCommand的Gps设置
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isGpsSimulate", false);
+        locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "simulate_gps_info", bundle);
+
+        //设置GPS
         Bundle gpsData = new Bundle();
         Location loc = new Location("gps");
         loc.setLongitude(location[0]);
@@ -330,6 +339,7 @@ public class SelectMapActivity extends AppCompatActivity implements
         gpsData.putParcelable(OctopuManager.GPS_LOCATION,loc);
         mOctopuManager.upGpsData(gpsData);
 
+        //清空Cell信息
         Bundle cellData = new Bundle();
         cellData.putParcelableArrayList(OctopuManager.CELL_LIST,new ArrayList<>());
         mOctopuManager.upCellData(cellData);
