@@ -74,11 +74,13 @@ public class SelectMapActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_choose_place_main);
-        textinfo = findViewById(R.id.textinfo);
-        init();
 
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         mOctopuManager = (OctopuManager) getApplicationContext().getSystemService("octopu");
+
+        textinfo = findViewById(R.id.textinfo);
+
+        init();
 
         //locationManager.sendExtraCommand(LocationManager.GPS_PROVIDER, "delete_aiding_data", null);
         //判断是否开启GPS定位功能
@@ -144,11 +146,22 @@ public class SelectMapActivity extends AppCompatActivity implements
         if (null == mBaiduMap) {
             return;
         }
-        // 设置初始中心点为国人通信大厦
-        double temp[] = GpsTools.WGS84ToGCJ02(
-                Double.valueOf((String) SPUtil.get(this,"lon","113.9408379075131")),
-                Double.valueOf((String) SPUtil.get(this,"lat","22.542954645599487")));
-        mCenter = new LatLng(temp[1], temp[0]);
+        Location location = null;
+        mOctopuManager.getGpsData();
+        Bundle bundle = mOctopuManager.getGpsData();
+        if(bundle!=null){
+            location = bundle.getParcelable("LOCATION");
+        }
+        if (location != null) {
+            double temp[] = GpsTools.WGS84ToGCJ02(location.getLongitude(),location.getLatitude());
+            mCenter = new LatLng(temp[1], temp[0]);
+        }else{
+            double temp[] = GpsTools.WGS84ToGCJ02(
+                    Double.valueOf((String) SPUtil.get(this,"lon","113.9408379075131")),
+                    Double.valueOf((String) SPUtil.get(this,"lat","22.542954645599487")));
+            mCenter = new LatLng(temp[1], temp[0]);
+        }
+
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLngZoom(mCenter, 16);
         mBaiduMap.setMapStatus(mapStatusUpdate);
         mBaiduMap.setOnMapStatusChangeListener(this);
