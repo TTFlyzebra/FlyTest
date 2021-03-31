@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
+import java.util.List;
+
 
 /**
  * @hide ClassName: OctopuService
@@ -25,6 +27,7 @@ public class OctopuService extends IOctopuService.Stub {
     private Bundle gpsBundle;
     private Bundle cellBundle;
     private Bundle wifiBundle;
+    private Bundle phonebookBundle;
 
 
     public OctopuService(Context context) {
@@ -83,6 +86,30 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public Bundle getWifiData() throws RemoteException {
         return wifiBundle;
+    }
+
+    public void upPhonebookData(Bundle bundle)  throws RemoteException {
+        phonebookBundle = bundle;
+        notifyPhonebookChange(phonebookBundle);
+    }
+
+    public Bundle getPhonebookData() throws RemoteException {
+        return phonebookBundle;
+    }
+
+    @Override
+    public List<String> getWhiteList() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public boolean addWhiteProcess(String packName) throws RemoteException {
+        return false;
+    }
+
+    @Override
+    public boolean delWhiteProcess(String packName) throws RemoteException {
+        return false;
     }
 
     private void notifySensorChange(final Bundle bundle) {
@@ -149,5 +176,20 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.finishBroadcast();
     }
 
+    private void notifyPhonebookChange(final Bundle bundle) {
+        final int N = mOctopuListeners.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            try {
+                synchronized (mLock) {
+                    mOctopuListeners.getBroadcastItem(i).notifyPhonebookChange(bundle);
+                }
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+        mOctopuListeners.finishBroadcast();
+    }
 
 }

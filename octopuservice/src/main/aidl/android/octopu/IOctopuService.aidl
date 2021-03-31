@@ -28,4 +28,15 @@ interface IOctopuService {
 
     Bundle getWifiData();
 
+    void upPhonebookData(inout Bundle bundle);
+
+    Bundle getPhonebookData();
+
+    //OcProcessService
+    List<String> getWhiteList();
+
+    boolean addWhiteProcess(String packName);
+
+    boolean delWhiteProcess(String packName);
+
 }

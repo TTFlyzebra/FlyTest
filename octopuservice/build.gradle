@@ -33,4 +33,8 @@ android {
     makeJar.dependsOn(build)
 }
 
+dependencies {
+    compileOnly files('libs\\framework.jar')
+}
+
 
