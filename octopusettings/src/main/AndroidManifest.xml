@@ -47,6 +47,8 @@
 
         <activity android:name=".SensorActivity"/>
 
+        <activity android:name=".SleepActivity"/>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="dPk8zhR3xTgp5M5wy7Klds0j0qwso3Uy" />

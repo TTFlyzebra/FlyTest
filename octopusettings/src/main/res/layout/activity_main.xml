@@ -69,4 +69,12 @@
         android:text="网络测试"
         android:visibility="gone" />
 
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="sleepTest"
+        android:text="休眠检测"
+        android:visibility="visible" />
+
 </LinearLayout>

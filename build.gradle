@@ -17,6 +17,12 @@ allprojects {
         google()
         jcenter()
     }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << '-Xbootclasspath/p:octopuservice/libs/framework.jar'
+        }
+    }
 }
 
 task clean(type: Delete) {
