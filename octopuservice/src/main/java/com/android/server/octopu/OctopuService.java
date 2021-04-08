@@ -25,7 +25,7 @@ public class OctopuService extends IOctopuService.Stub {
     private Bundle gpsBundle;
     private Bundle cellBundle;
     private Bundle wifiBundle;
-
+    private Bundle phonebookBundle;
 
     public OctopuService(Context context) {
         mContext = context;
@@ -83,6 +83,17 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public Bundle getWifiData() throws RemoteException {
         return wifiBundle;
+    }
+
+    @Override
+    public void upPhonebookData(Bundle bundle)  throws RemoteException {
+        phonebookBundle = bundle;
+        notifyPhonebookChange(phonebookBundle);
+    }
+
+    @Override
+    public Bundle getPhonebookData() throws RemoteException {
+        return phonebookBundle;
     }
 
     private void notifySensorChange(final Bundle bundle) {
@@ -149,5 +160,24 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.finishBroadcast();
     }
 
+    private void notifyPhonebookChange(final Bundle bundle) {
+        final int N = mOctopuListeners.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            try {
+                synchronized (mLock) {
+                    mOctopuListeners.getBroadcastItem(i).notifyPhonebookChange(bundle);
+                }
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+        mOctopuListeners.finishBroadcast();
+    }
 
+    @Override
+    public void setAirplaneModeOn(boolean enabling) {
+
+    }
 }

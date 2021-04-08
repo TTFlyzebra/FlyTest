@@ -28,4 +28,9 @@ interface IOctopuService {
 
     Bundle getWifiData();
 
+    void upPhonebookData(inout Bundle bundle);
+
+    Bundle getPhonebookData();
+
+    void setAirplaneModeOn(boolean enabling);
 }

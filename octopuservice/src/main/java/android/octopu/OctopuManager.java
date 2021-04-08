@@ -14,26 +14,35 @@ import java.util.List;
  * Email:flycnzebra@gmail.com
  * Date: 20-1-8 下午5:44
  */
+
 public class OctopuManager {
 
     public static final String SENSOR_TYPE = "TYPE";
     public static final String SENSOR_X = "X";
     public static final String SENSOR_Y = "Y";
     public static final String SENSOR_Z = "Z";
+    public static final String SENSOR_ARRAY = "ARRAY";
     public static final String SENSOR_TIME = "TIME";
     public static final String GPS_LOCATION = "LOCATION";
     public static final String GPS_STARLIST = "STARLIST";
     public static final String CELL_LIST = "CELLLIST";
     public static final String WIFI_LIST = "WIFILIST";
+    public static final String PB_ACTION = "ACTION";
+    public static final String PB_NAME = "NAME";
+    public static final String PB_NUMBER = "NUMBER";
+    public static final String PB_SIMCARD = "IN_SIM";
 
+    public static final int PB_ACTION_SAVE = 0;
+    public static final int PB_ACTION_DELETE_ONE = 1;
+    public static final int PB_ACTION_DELETE_ALL = 2;
 
     private IOctopuService mService;
     private OctopuListener mOctopuListener = new OctopuListener.Stub() {
         @Override
         public void notifySensorChange(Bundle bundle) throws RemoteException {
             synchronized (mSensorLock) {
-                for (SensorListener llstener : mSensorListeners) {
-                    llstener.notifySensorChange(bundle);
+                for (SensorListener listener : mSensorListeners) {
+                    listener.notifySensorChange(bundle);
                 }
             }
         }
@@ -41,8 +50,8 @@ public class OctopuManager {
         @Override
         public void notifyGpsChange(Bundle bundle) throws RemoteException {
             synchronized (mGpsLock) {
-                for (GpsListener llstener : mGpsListeners) {
-                    llstener.notifyGpsChange(bundle);
+                for (GpsListener listener : mGpsListeners) {
+                    listener.notifyGpsChange(bundle);
                 }
             }
         }
@@ -50,8 +59,8 @@ public class OctopuManager {
         @Override
         public void notifyCellChange(Bundle bundle) throws RemoteException {
             synchronized (mCellLock) {
-                for (CellListener llstener : mCellListeners) {
-                    llstener.notifyCellChange(bundle);
+                for (CellListener listener : mCellListeners) {
+                    listener.notifyCellChange(bundle);
                 }
             }
         }
@@ -59,8 +68,17 @@ public class OctopuManager {
         @Override
         public void notifyWifiChange(Bundle bundle) throws RemoteException {
             synchronized (mWifiLock) {
-                for (WifiListener llstener : mWifiListeners) {
-                    llstener.notifyWifiChange(bundle);
+                for (WifiListener listener : mWifiListeners) {
+                    listener.notifyWifiChange(bundle);
+                }
+            }
+        }
+
+        @Override
+        public void notifyPhonebookChange(Bundle bundle) throws RemoteException {
+            synchronized (mPhonebookLock) {
+                for (PhonebookListener listener : mPhonebookListeners) {
+                    listener.notifyPhonebookChange(bundle);
                 }
             }
         }
@@ -78,7 +96,6 @@ public class OctopuManager {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
     }
 
     public Bundle getSensorData() {
@@ -148,6 +165,27 @@ public class OctopuManager {
         try {
             if (mService != null) {
                 return mService.getWifiData();
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void upPhonebookData(Bundle bundle) {
+        try {
+            if (mService != null) {
+                mService.upPhonebookData(bundle);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Bundle getPhonebookData() {
+        try {
+            if (mService != null) {
+                return mService.getPhonebookData();
             }
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -239,6 +277,28 @@ public class OctopuManager {
         unregisterListener();
     }
 
+    private List<PhonebookListener> mPhonebookListeners = new ArrayList<>();
+    private final Object mPhonebookLock = new Object();
+
+    public interface PhonebookListener {
+        void notifyPhonebookChange(Bundle bundle);
+    }
+
+    public void addPhonebookListener(PhonebookListener phonebookListener) {
+        registerLisenter();
+        synchronized (mPhonebookLock) {
+            mPhonebookListeners.add(phonebookListener);
+        }
+    }
+
+    public void removePhoneListener(PhonebookListener phonebookListener) {
+        synchronized (mPhonebookLock) {
+            mPhonebookListeners.remove(phonebookListener);
+        }
+        unregisterListener();
+    }
+
+
     private boolean isRegister = false;
 
     private void registerLisenter() {
@@ -266,4 +326,15 @@ public class OctopuManager {
         }
     }
 
+    public void setAirplaneModeOn(boolean enabling) {
+        try {
+            if (mService != null) {
+                mService.setAirplaneModeOn(enabling);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+

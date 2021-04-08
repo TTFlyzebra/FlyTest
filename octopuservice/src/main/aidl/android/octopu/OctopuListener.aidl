@@ -15,4 +15,5 @@ interface OctopuListener {
 
     oneway void notifyWifiChange(in Bundle bundle);
 
+    oneway void notifyPhonebookChange(in Bundle bundle);
 }
