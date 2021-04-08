@@ -291,7 +291,7 @@ public class OctopuManager {
         }
     }
 
-    public void removePhoneListener(PhonebookListener phonebookListener) {
+    public void removePhonebookListener(PhonebookListener phonebookListener) {
         synchronized (mPhonebookLock) {
             mPhonebookListeners.remove(phonebookListener);
         }
