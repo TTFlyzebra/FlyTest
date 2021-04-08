@@ -32,6 +32,8 @@ interface IOctopuService {
 
     Bundle getPhonebookData();
 
+    void setAirplaneModeOn(boolean enabling);
+
     //OcProcessService
     List<String> getWhiteList();
 

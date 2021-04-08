@@ -322,4 +322,14 @@ public class OctopuManager {
         }
     }
 
+    public void setAirplaneModeOn(boolean enabling) {
+        try {
+            if (mService != null) {
+                mService.setAirplaneModeOn(enabling);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

@@ -1,14 +1,16 @@
 package com.android.server.octopu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.octopu.FlyLog;
 import android.octopu.IOctopuService;
 import android.octopu.OctopuListener;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
-
-import java.util.List;
+import android.os.UserHandle;
+import android.provider.Settings;
 
 
 /**
@@ -88,11 +90,13 @@ public class OctopuService extends IOctopuService.Stub {
         return wifiBundle;
     }
 
+    @Override
     public void upPhonebookData(Bundle bundle)  throws RemoteException {
         phonebookBundle = bundle;
         notifyPhonebookChange(phonebookBundle);
     }
 
+    @Override
     public Bundle getPhonebookData() throws RemoteException {
         return phonebookBundle;
     }
@@ -192,4 +196,21 @@ public class OctopuService extends IOctopuService.Stub {
         mOctopuListeners.finishBroadcast();
     }
 
+    @Override
+    public void setAirplaneModeOn(boolean enabling) {
+        long identity = Binder.clearCallingIdentity();
+        try {
+            // Change the system setting
+            Settings.Global.putInt(mContext.getContentResolver(),
+                                   Settings.Global.AIRPLANE_MODE_ON,
+                                   enabling ? 1 : 0);
+
+            // Post the intent
+            Intent intent = new Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+            intent.putExtra("state", enabling);
+            mContext.sendBroadcastAsUser(intent, UserHandle.ALL);
+        } finally {
+            Binder.restoreCallingIdentity(identity);
+        }
+    }
 }

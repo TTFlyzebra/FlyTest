@@ -83,4 +83,8 @@ public class MainActivity extends AppCompatActivity {
     public void sensortest(View view) {
         startActivity(new Intent(this, SensorActivity.class));
     }
+
+    public void sleepTest(View view) {
+        startActivity(new Intent(this, SleepActivity.class));
+    }
 }
