@@ -87,4 +87,6 @@ public class MainActivity extends AppCompatActivity {
     public void sleepTest(View view) {
         startActivity(new Intent(this, SleepActivity.class));
     }
+
+    public void commandtest(View view) {startActivity(new Intent(this, CommandActivity.class));}
 }
