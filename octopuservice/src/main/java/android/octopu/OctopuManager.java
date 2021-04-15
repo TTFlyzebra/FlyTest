@@ -309,6 +309,7 @@ public class OctopuManager {
 
     private List<WebcamListener> mWebcamListeners = new ArrayList<>();
     private final Object mWebcamLock = new Object();
+
     public interface WebcamListener {
         void notifyWebcamChange(Bundle bundle);
     }
