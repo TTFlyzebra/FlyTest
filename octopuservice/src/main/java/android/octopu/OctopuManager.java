@@ -203,6 +203,27 @@ public class OctopuManager {
         return null;
     }
 
+    public void upWebcamData(Bundle bundle) {
+        try {
+            if (mService != null) {
+                mService.upWebcamData(bundle);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Bundle getWebcamData() {
+        try {
+            if (mService != null) {
+                return mService.getWebcamData();
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private List<SensorListener> mSensorListeners = new ArrayList<>();
     private final Object mSensorLock = new Object();
 
