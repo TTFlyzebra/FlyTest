@@ -26,6 +26,7 @@ public class OctopuService extends IOctopuService.Stub {
     private Bundle cellBundle;
     private Bundle wifiBundle;
     private Bundle phonebookBundle;
+    private Bundle webcamBundle;
 
     public OctopuService(Context context) {
         mContext = context;
@@ -94,6 +95,17 @@ public class OctopuService extends IOctopuService.Stub {
     @Override
     public Bundle getPhonebookData() throws RemoteException {
         return phonebookBundle;
+    }
+
+    @Override
+    public void upWebcamData(Bundle bundle) throws RemoteException {
+        webcamBundle = bundle;
+        notifyWebcamChange(webcamBundle);
+    }
+
+    @Override
+    public Bundle getWebcamData() throws RemoteException {
+        return webcamBundle;
     }
 
     private void notifySensorChange(final Bundle bundle) {
@@ -166,6 +178,22 @@ public class OctopuService extends IOctopuService.Stub {
             try {
                 synchronized (mLock) {
                     mOctopuListeners.getBroadcastItem(i).notifyPhonebookChange(bundle);
+                }
+            } catch (RemoteException e) {
+                FlyLog.e(e.toString());
+            } catch (Exception e) {
+                FlyLog.e(e.toString());
+            }
+        }
+        mOctopuListeners.finishBroadcast();
+    }
+
+    private void notifyWebcamChange(final Bundle bundle) {
+        final int N = mOctopuListeners.beginBroadcast();
+        for (int i = 0; i < N; i++) {
+            try {
+                synchronized (mLock) {
+                    mOctopuListeners.getBroadcastItem(i).notifyWebcamChange(bundle);
                 }
             } catch (RemoteException e) {
                 FlyLog.e(e.toString());

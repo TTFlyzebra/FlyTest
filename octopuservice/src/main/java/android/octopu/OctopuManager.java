@@ -82,6 +82,15 @@ public class OctopuManager {
                 }
             }
         }
+
+        @Override
+        public void notifyWebcamChange(Bundle bundle) throws RemoteException {
+            synchronized (mWebcamLock) {
+                for (WebcamListener listener : mWebcamListeners) {
+                    listener.notifyWebcamChange(bundle);
+                }
+            }
+        }
     };
 
     public OctopuManager(Context context, IOctopuService octopuService) {
@@ -298,6 +307,26 @@ public class OctopuManager {
         unregisterListener();
     }
 
+    private List<WebcamListener> mWebcamListeners = new ArrayList<>();
+    private final Object mWebcamLock = new Object();
+    public interface WebcamListener {
+        void notifyWebcamChange(Bundle bundle);
+    }
+
+    public void addWebcamListener(WebcamListener webcamListener) {
+        registerLisenter();
+        synchronized (mWebcamLock) {
+            mWebcamListeners.add(webcamListener);
+        }
+    }
+
+    public void removeWebcamListener(WebcamListener webcamListener) {
+        synchronized (mWebcamLock) {
+            mWebcamListeners.remove(webcamListener);
+        }
+        unregisterListener();
+    }
+
 
     private boolean isRegister = false;
 
@@ -314,7 +343,8 @@ public class OctopuManager {
 
     private void unregisterListener() {
         if (mSensorListeners.isEmpty() && mGpsListeners.isEmpty() &&
-                mCellListeners.isEmpty() && mWifiListeners.isEmpty()) {
+                mCellListeners.isEmpty() && mWifiListeners.isEmpty() &&
+                mPhonebookListeners.isEmpty() && mWebcamListeners.isEmpty()) {
             if (mService != null) {
                 try {
                     mService.unregisterListener(mOctopuListener);

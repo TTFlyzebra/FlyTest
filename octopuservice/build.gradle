@@ -25,7 +25,7 @@ android {
     task makeJar(type: Copy) {
         delete 'build/libs/octopu.jar'
         from('build/intermediates/aar_main_jar/release/')
-        into('../octopustest/libs/')
+        into('../octopusettings/libs/')
         include('classes.jar')
         rename('classes.jar', 'octopu.jar')
     }
