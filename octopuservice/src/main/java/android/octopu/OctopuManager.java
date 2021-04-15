@@ -27,6 +27,7 @@ public class OctopuManager {
     public static final String GPS_STARLIST = "STARLIST";
     public static final String CELL_LIST = "CELLLIST";
     public static final String WIFI_LIST = "WIFILIST";
+    public static final String WIFI_INFO = "WIFIINFO";
     public static final String PB_ACTION = "ACTION";
     public static final String PB_NAME = "NAME";
     public static final String PB_NUMBER = "NUMBER";
