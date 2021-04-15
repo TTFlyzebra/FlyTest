@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.location.Location;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.octopu.OctopuManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -109,6 +112,20 @@ public class CommandActivity extends AppCompatActivity {
             @Override
             public String start(String param1, String param2) {
                 return getcelllocation(param1, param2);
+            }
+        });
+
+        commands.add(new Command("getwifiscan") {
+            @Override
+            public String start(String param1, String param2) {
+                return getwifiscan(param1, param2);
+            }
+        });
+
+        commands.add(new Command("getwifiinfo") {
+            @Override
+            public String start(String param1, String param2) {
+                return getwifiinfo(param1, param2);
             }
         });
     }
@@ -288,5 +305,21 @@ public class CommandActivity extends AppCompatActivity {
             ret.append("Sorry, Don't support CDMA");
         }
         return ret.toString();
+    }
+
+    private String getwifiscan(String param1, String param2) {
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        List<ScanResult> result = wifi.getScanResults();
+        StringBuilder ret = new StringBuilder();
+        for (ScanResult r : result) {
+            ret.append(r.toString()).append("\n\n");
+        }
+        return ret.toString();
+    }
+
+    private String getwifiinfo(String param1, String param2) {
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        WifiInfo result = wifi.getConnectionInfo();
+        return result.toString();
     }
 }
