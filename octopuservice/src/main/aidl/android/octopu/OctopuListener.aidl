@@ -18,4 +18,6 @@ interface OctopuListener {
     oneway void notifyPhonebookChange(in Bundle bundle);
 
     oneway void notifyWebcamChange(in Bundle bundle);
+
+    oneway void notifySmsChange(in Bundle bundle);
 }

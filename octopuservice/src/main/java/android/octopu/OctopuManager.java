@@ -32,6 +32,8 @@ public class OctopuManager {
     public static final String PB_NAME = "NAME";
     public static final String PB_NUMBER = "NUMBER";
     public static final String PB_SIMCARD = "IN_SIM";
+    public static final String SMS_NUMBER = "SMS_NUMBER";
+    public static final String SMS_TEXT = "SMS_TEXT";
 
     public static final int PB_ACTION_SAVE = 0;
     public static final int PB_ACTION_DELETE_ONE = 1;
@@ -89,6 +91,15 @@ public class OctopuManager {
             synchronized (mWebcamLock) {
                 for (WebcamListener listener : mWebcamListeners) {
                     listener.notifyWebcamChange(bundle);
+                }
+            }
+        }
+
+        @Override
+        public void notifySmsChange(Bundle bundle) throws RemoteException {
+            synchronized (mSmsLock) {
+                for (SmsListener listener : mSmsListeners) {
+                    listener.notifySmsChange(bundle);
                 }
             }
         }
@@ -224,6 +235,27 @@ public class OctopuManager {
         return null;
     }
 
+    public void upSmsData(Bundle bundle) {
+        try {
+            if (mService != null) {
+                mService.upSmsData(bundle);
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Bundle getSmsData() {
+        try {
+            if (mService != null) {
+                return mService.getSmsData();
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private List<SensorListener> mSensorListeners = new ArrayList<>();
     private final Object mSensorLock = new Object();
 
@@ -350,6 +382,26 @@ public class OctopuManager {
         unregisterListener();
     }
 
+    private List<SmsListener> mSmsListeners = new ArrayList<>();
+    private final Object mSmsLock = new Object();
+
+    public interface SmsListener {
+        void notifySmsChange(Bundle bundle);
+    }
+
+    public void addSmsListener(SmsListener smsListener) {
+        registerLisenter();
+        synchronized (mSmsLock) {
+            mSmsListeners.add(smsListener);
+        }
+    }
+
+    public void removeSmsListener(SmsListener smsListener) {
+        synchronized (mSmsLock) {
+            mSmsListeners.remove(smsListener);
+        }
+        unregisterListener();
+    }
 
     private boolean isRegister = false;
 
@@ -390,4 +442,3 @@ public class OctopuManager {
     }
 
 }
-

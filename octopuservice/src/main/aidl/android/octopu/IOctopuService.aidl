@@ -32,9 +32,14 @@ interface IOctopuService {
 
     Bundle getPhonebookData();
 
+    void upSmsData(inout Bundle bundle);
+
+    Bundle getSmsData();
+
     void upWebcamData(inout Bundle bundle);
 
     Bundle getWebcamData();
 
     void setAirplaneModeOn(boolean enabling);
+
 }

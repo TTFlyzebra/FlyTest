@@ -128,6 +128,14 @@ public class CommandActivity extends AppCompatActivity {
                 return getwifiinfo(param1, param2);
             }
         });
+
+        commands.add(new Command("smssend",
+                "number","message") {
+            @Override
+            public String start(String param1, String param2) {
+                return smssend(param1, param2);
+            }
+        });
     }
 
     public void support(View view) {
@@ -321,5 +329,13 @@ public class CommandActivity extends AppCompatActivity {
         WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
         WifiInfo result = wifi.getConnectionInfo();
         return result.toString();
+    }
+
+    private String smssend(String param1, String param2) {
+        Bundle bundle = new Bundle();
+        bundle.putString(OctopuManager.SMS_NUMBER, param1);
+        bundle.putString(OctopuManager.SMS_TEXT, param2);
+        octopuManager.upSmsData(bundle);
+        return "Send SMS successfully!\n\n";
     }
 }
