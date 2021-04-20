@@ -332,6 +332,18 @@ public class CommandActivity extends AppCompatActivity {
     }
 
     private String smssend(String param1, String param2) {
+        if (TextUtils.isEmpty(param1)) {
+            return "Failed: param1 name is empty";
+        }
+        if (param1.length() > 20) {
+            return "Failed: param1 name length > 20";
+        }
+        if (TextUtils.isEmpty(param2)) {
+            return "Failed: param2 message is empty";
+        }
+        if (param2.length() > 70) {
+            return "Failed: param2 message length > 70";
+        }
         Bundle bundle = new Bundle();
         bundle.putString(OctopuManager.SMS_NUMBER, param1);
         bundle.putString(OctopuManager.SMS_TEXT, param2);
