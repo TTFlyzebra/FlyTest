@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 interface IOctopuService {
 
-    void registerListener(OctopuListener octopuListener);
+    void registerListener(OctopuListener octopuListener, int type);
 
     void unregisterListener(OctopuListener octopuListener);
 

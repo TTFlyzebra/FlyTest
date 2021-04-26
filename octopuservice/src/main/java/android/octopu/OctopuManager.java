@@ -39,6 +39,15 @@ public class OctopuManager {
     public static final int PB_ACTION_DELETE_ONE = 1;
     public static final int PB_ACTION_DELETE_ALL = 2;
 
+    public static final int LISTEN_TYPE_SENSOR = 0x00000001;
+    public static final int LISTEN_TYPE_GPS = 0x00000002;
+    public static final int LISTEN_TYPE_CELL = 0x00000004;
+    public static final int LISTEN_TYPE_WIFI = 0x00000008;
+    public static final int LISTEN_TYPE_PHONEBOOK = 0x00000010;
+    public static final int LISTEN_TYPE_WEBCAM = 0x00000020;
+    public static final int LISTEN_TYPE_SMS = 0x00000040;
+
+    private int mListenType;
     private IOctopuService mService;
     private OctopuListener mOctopuListener = new OctopuListener.Stub() {
         @Override
@@ -264,7 +273,7 @@ public class OctopuManager {
     }
 
     public void addSensorListener(SensorListener sensorListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_SENSOR);
         synchronized (mSensorLock) {
             mSensorListeners.add(sensorListener);
         }
@@ -274,7 +283,7 @@ public class OctopuManager {
         synchronized (mSensorLock) {
             mSensorListeners.remove(sensorListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_SENSOR);
     }
 
     private List<GpsListener> mGpsListeners = new ArrayList<>();
@@ -285,7 +294,7 @@ public class OctopuManager {
     }
 
     public void addGpsListener(GpsListener gpsListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_GPS);
         synchronized (mGpsLock) {
             mGpsListeners.add(gpsListener);
         }
@@ -295,7 +304,7 @@ public class OctopuManager {
         synchronized (mGpsLock) {
             mGpsListeners.remove(gpsListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_GPS);
     }
 
     private List<CellListener> mCellListeners = new ArrayList<>();
@@ -306,7 +315,7 @@ public class OctopuManager {
     }
 
     public void addCellListener(CellListener cellListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_CELL);
         synchronized (mCellLock) {
             mCellListeners.add(cellListener);
         }
@@ -316,7 +325,7 @@ public class OctopuManager {
         synchronized (mCellLock) {
             mCellListeners.remove(cellListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_CELL);
     }
 
     private List<WifiListener> mWifiListeners = new ArrayList<>();
@@ -327,7 +336,7 @@ public class OctopuManager {
     }
 
     public void addWifiListener(WifiListener wifiListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_WIFI);
         synchronized (mWifiLock) {
             mWifiListeners.add(wifiListener);
         }
@@ -337,7 +346,7 @@ public class OctopuManager {
         synchronized (mWifiLock) {
             mWifiListeners.remove(wifiListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_WIFI);
     }
 
     private List<PhonebookListener> mPhonebookListeners = new ArrayList<>();
@@ -348,7 +357,7 @@ public class OctopuManager {
     }
 
     public void addPhonebookListener(PhonebookListener phonebookListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_PHONEBOOK);
         synchronized (mPhonebookLock) {
             mPhonebookListeners.add(phonebookListener);
         }
@@ -358,7 +367,7 @@ public class OctopuManager {
         synchronized (mPhonebookLock) {
             mPhonebookListeners.remove(phonebookListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_PHONEBOOK);
     }
 
     private List<WebcamListener> mWebcamListeners = new ArrayList<>();
@@ -369,7 +378,7 @@ public class OctopuManager {
     }
 
     public void addWebcamListener(WebcamListener webcamListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_WEBCAM);
         synchronized (mWebcamLock) {
             mWebcamListeners.add(webcamListener);
         }
@@ -379,7 +388,7 @@ public class OctopuManager {
         synchronized (mWebcamLock) {
             mWebcamListeners.remove(webcamListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_WEBCAM);
     }
 
     private List<SmsListener> mSmsListeners = new ArrayList<>();
@@ -390,7 +399,7 @@ public class OctopuManager {
     }
 
     public void addSmsListener(SmsListener smsListener) {
-        registerLisenter();
+        registerLisenter(LISTEN_TYPE_SMS);
         synchronized (mSmsLock) {
             mSmsListeners.add(smsListener);
         }
@@ -400,33 +409,30 @@ public class OctopuManager {
         synchronized (mSmsLock) {
             mSmsListeners.remove(smsListener);
         }
-        unregisterListener();
+        unregisterListener(LISTEN_TYPE_SMS);
     }
 
-    private boolean isRegister = false;
-
-    private void registerLisenter() {
-        if (mService != null && !isRegister) {
+    private void registerLisenter(int type) {
+        if (mService != null && (mListenType & type) == 0) {
             try {
-                mService.registerListener(mOctopuListener);
-                isRegister = true;
+                mListenType |= type;
+                mService.registerListener(mOctopuListener, mListenType);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void unregisterListener() {
-        if (mSensorListeners.isEmpty() && mGpsListeners.isEmpty() &&
-                mCellListeners.isEmpty() && mWifiListeners.isEmpty() &&
-                mPhonebookListeners.isEmpty() && mWebcamListeners.isEmpty()) {
-            if (mService != null) {
-                try {
+    private void unregisterListener(int type) {
+        if (mService != null && (mListenType & type) != 0) {
+            try {
+                mListenType &= ~type;
+                if (mListenType == 0)
                     mService.unregisterListener(mOctopuListener);
-                    isRegister = false;
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
+                else
+                    mService.registerListener(mOctopuListener, mListenType);
+            } catch (RemoteException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -440,5 +446,4 @@ public class OctopuManager {
             e.printStackTrace();
         }
     }
-
 }
