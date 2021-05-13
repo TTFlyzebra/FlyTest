@@ -83,4 +83,11 @@
         android:gravity="center"
         android:onClick="commandtest"
         android:text="命令测试" />
+
+    <Button
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="updater"
+        android:text="升级测试" />
 </LinearLayout>

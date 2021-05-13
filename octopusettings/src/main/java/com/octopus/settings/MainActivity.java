@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void camera2test(View view) {
-//        startActivity(new Intent(this, Camera2Activity.class));
         Intent intent = new Intent(Intent.ACTION_MAIN);
         ComponentName cn = new ComponentName("com.flyzebra.player", "com.flyzebra.player.MainActivity");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -89,4 +88,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void commandtest(View view) {startActivity(new Intent(this, CommandActivity.class));}
+
+    public void updater(View view) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            ComponentName cn = new ComponentName("com.flyzebra.fota", "com.flyzebra.fota.MainActivity");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setComponent(cn);
+            startActivity(intent);
+        }catch (Exception e){
+            FlyLog.e(e.toString());
+        }
+    }
 }
