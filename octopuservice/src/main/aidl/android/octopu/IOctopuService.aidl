@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 interface IOctopuService {
 
-    void registerListener(OctopuListener octopuListener);
+    void registerListener(OctopuListener octopuListener, int type);
 
     void unregisterListener(OctopuListener octopuListener);
 
@@ -32,9 +32,14 @@ interface IOctopuService {
 
     Bundle getPhonebookData();
 
+    void upSmsData(inout Bundle bundle);
+
+    Bundle getSmsData();
+
     void upWebcamData(inout Bundle bundle);
 
     Bundle getWebcamData();
 
     void setAirplaneModeOn(boolean enabling);
+
 }

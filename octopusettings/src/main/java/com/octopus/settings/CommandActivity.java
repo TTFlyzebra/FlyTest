@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.location.Location;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.octopu.OctopuManager;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -109,6 +112,28 @@ public class CommandActivity extends AppCompatActivity {
             @Override
             public String start(String param1, String param2) {
                 return getcelllocation(param1, param2);
+            }
+        });
+
+        commands.add(new Command("getwifiscan") {
+            @Override
+            public String start(String param1, String param2) {
+                return getwifiscan(param1, param2);
+            }
+        });
+
+        commands.add(new Command("getwifiinfo") {
+            @Override
+            public String start(String param1, String param2) {
+                return getwifiinfo(param1, param2);
+            }
+        });
+
+        commands.add(new Command("smssend",
+                "number","message") {
+            @Override
+            public String start(String param1, String param2) {
+                return smssend(param1, param2);
             }
         });
     }
@@ -288,5 +313,41 @@ public class CommandActivity extends AppCompatActivity {
             ret.append("Sorry, Don't support CDMA");
         }
         return ret.toString();
+    }
+
+    private String getwifiscan(String param1, String param2) {
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        List<ScanResult> result = wifi.getScanResults();
+        StringBuilder ret = new StringBuilder();
+        for (ScanResult r : result) {
+            ret.append(r.toString()).append("\n\n");
+        }
+        return ret.toString();
+    }
+
+    private String getwifiinfo(String param1, String param2) {
+        WifiManager wifi = (WifiManager)getSystemService(Context.WIFI_SERVICE);
+        WifiInfo result = wifi.getConnectionInfo();
+        return result.toString();
+    }
+
+    private String smssend(String param1, String param2) {
+        if (TextUtils.isEmpty(param1)) {
+            return "Failed: param1 name is empty";
+        }
+        if (param1.length() > 20) {
+            return "Failed: param1 name length > 20";
+        }
+        if (TextUtils.isEmpty(param2)) {
+            return "Failed: param2 message is empty";
+        }
+        if (param2.length() > 70) {
+            return "Failed: param2 message length > 70";
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString(OctopuManager.SMS_NUMBER, param1);
+        bundle.putString(OctopuManager.SMS_TEXT, param2);
+        octopuManager.upSmsData(bundle);
+        return "Send SMS successfully!\n\n";
     }
 }
